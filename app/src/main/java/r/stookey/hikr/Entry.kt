@@ -16,6 +16,8 @@ class Entry: AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.entry)
+
+
         val btnSignUp: Button = findViewById(R.id.bSignup)
         btnSignUp.setOnClickListener(this)
         val btnLogin: Button = findViewById(R.id.bLogin)
