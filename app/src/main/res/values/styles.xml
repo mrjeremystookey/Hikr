@@ -11,6 +11,9 @@
         <item name="colorControlHighlight">#C8E6C9</item>
     </style>
 
+    <style name="Forestry" parent="AppTheme" >
+        <item name="colorAccent">@color/accent</item>
+    </style>
 
 
 </resources>
