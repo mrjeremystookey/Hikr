@@ -1,6 +1,6 @@
 package r.stookey.hikr
 
-data class User(var Username: String, var Email: String?, var Password: String){
+data class User(val id: String, var Username: String, var Email: String, var Password: String){
 
 
     fun changePassword(password: String){

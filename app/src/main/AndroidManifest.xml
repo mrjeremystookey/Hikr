@@ -12,7 +12,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="Entry"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/Forestry">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Login"
-            android:label="Login"></activity>
+            android:label="Login"
+            android:theme="@style/Forestry"></activity>
         <activity android:name=".Signup"
             android:label="Create Account"></activity>
 

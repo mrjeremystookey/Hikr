@@ -51,7 +51,7 @@
         android:background="@color/DarkerGreen"
         android:elevation="5dp"
         android:ems="10"
-        android:hint="Email (Optional)"
+        android:hint="Email"
         android:inputType="textPersonName"
         android:padding="5dp"
         android:paddingStart="10dp"
