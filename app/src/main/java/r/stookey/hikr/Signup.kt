@@ -53,6 +53,7 @@ class Signup: AppCompatActivity(), View.OnClickListener{
                 Log.d(TAG, "user creation successful")
                 toast("user creation successful")
                 creationIntent = Intent(this, Post::class.java)
+                //How to add User extra to an Intent?
                 creationIntent.putExtra("createdUser", createdUser.toString())
                 startActivity(creationIntent)
             }
