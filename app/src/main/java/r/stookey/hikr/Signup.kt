@@ -30,7 +30,6 @@ class Signup: AppCompatActivity(), View.OnClickListener{
     }
 
     override fun onClick(v: View?) {
-
         Log.d(TAG, "creating new user...")
         createNewUser()
     }
@@ -39,7 +38,7 @@ class Signup: AppCompatActivity(), View.OnClickListener{
         if(etPassword.text.toString() == (etPasswordConfirm.text.toString())) {
             ref = FirebaseDatabase.getInstance().getReference("Users")
             userId = ref.push().key
-            createdUser = User(userId, etUsername.text.toString(), etEmail.text.toString(), etPassword.text.toString())
+            createdUser = User(userId, etUsername.text.toString(), etUsername.text.toString(), etPassword.text.toString())
             ref.child(userId).setValue(createdUser).addOnCompleteListener {
                 Log.d(TAG, "user creation successful")
                 toast("user creation successful")
