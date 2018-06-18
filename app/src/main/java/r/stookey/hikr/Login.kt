@@ -62,10 +62,17 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
         //Todo check firebase database for user information and accept or deny login (Authenticate user)
         //Todo get user from firebase database with username's email address to pass to the post class
         //where email equals etEmail if password equals etPassword
-        //user.username = firebase data where email = username
-        //set user email to etEmail
-        user.username = "jeremystookey"
-        user.email = etEmail.text.toString()
+        firebaseAuth.signInWithEmailAndPassword(etEmail.text.toString(), etPassword.text.toString()).addOnCompleteListener {
+            if(it.isSuccessful){
+                firebaseUser = firebaseAuth.currentUser
+                user.username = firebaseUser?.displayName
+                user.email = firebaseUser?.email
+                updateStatus("Logged in")
+            } else{
+                updateStatus("Unable to login, firebase sign in failed")
+                toast("Unable to login, check email and password")
+            }
+        }
         return user
     }
 
@@ -74,4 +81,9 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
         smartLogin.onActivityResult(requestCode, resultCode, data, config)
 
     }
+
+    fun updateStatus(status: String){
+        Log.d(TAG, status)
+    }
+
 }
