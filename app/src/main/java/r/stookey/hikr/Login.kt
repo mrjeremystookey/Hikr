@@ -13,6 +13,10 @@ import studios.codelight.smartloginlibrary.*
 import studios.codelight.smartloginlibrary.users.SmartUser
 import studios.codelight.smartloginlibrary.util.SmartLoginException
 
+//Login in system
+//https://github.com/CodelightStudios/Android-Smart-Login/wiki/Configuring-SmartLoginCallbacks
+
+
 class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
     val TAG: String = "Login"
 

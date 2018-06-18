@@ -35,7 +35,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-common:0.8.3"
     implementation 'codelight.studios:android-smart-login:1.2'
     implementation 'com.google.firebase:firebase-auth:16.0.1'
-
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 
 
 }
