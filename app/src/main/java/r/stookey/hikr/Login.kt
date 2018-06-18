@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.login.*
 import org.jetbrains.anko.toast
 import studios.codelight.smartloginlibrary.*
@@ -20,11 +22,19 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
 
     lateinit var loginIntent: Intent
 
+     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+     private var firebaseUser: FirebaseUser? = firebaseAuth.currentUser
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
         bLogin.setOnClickListener(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        firebaseUser = firebaseAuth.currentUser
     }
 
     override fun onClick(v: View?) {
@@ -37,7 +47,8 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
 
     override fun onLoginSuccess(user: SmartUser?) {
         loginIntent = Intent(this, Post::class.java)
-        loginIntent.putExtra("user", user.toString())
+        loginIntent.putExtra("email", user?.email)
+        loginIntent.putExtra("username", user?.username)
         Log.d(TAG, "onLoginSuccess: "+ user.toString())
         startActivity(loginIntent)
 
@@ -48,11 +59,13 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
     }
 
     override fun doCustomLogin(): SmartUser {
-        //Todo check firebase database for user information and accept or deny login
+        //Todo check firebase database for user information and accept or deny login (Authenticate user)
+        //Todo get user from firebase database with username's email address to pass to the post class
         //where email equals etEmail if password equals etPassword
+        //user.username = firebase data where email = username
         //set user email to etEmail
+        user.username = "jeremystookey"
         user.email = etEmail.text.toString()
-        user.username = etPassword.text.toString()
         return user
     }
 

@@ -11,7 +11,8 @@ class Post: AppCompatActivity(), View.OnClickListener {
 
     val TAG: String = "POST"
 
-    private lateinit var user: String
+    private lateinit var username: String
+    private lateinit var email: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,16 +23,26 @@ class Post: AppCompatActivity(), View.OnClickListener {
         fabAddPost.setOnClickListener(this)
     }
 
-    private fun setUser(){
+    override fun onStart() {
+        super.onStart()
+        setUser()
+    }
+
+    private fun setUser() {
         //TODO if intent comes from Sign Up or Login In
-        if(intent.)
-        user = intent.getStringExtra("user")
-        tvUsername.text = user
+        if (intent.hasExtra("email") && intent.hasExtra("username")) {
+            tvUsername.text = intent.getStringExtra("username")
+            toast("logged in as " + tvUsername.text)
+            Log.d(TAG, "setUser(): Logged In")
+        } else if (intent.hasExtra("newUserEmail") && intent.hasExtra("newUserUsername"))
+            tvUsername.text = intent.getStringExtra("newUserUsername")
+            toast("new user registered, username is " + tvUsername.text)
+            Log.d(TAG, "setUser(): New User Registered")
+
     }
 
     override fun onClick(v: View?) {
-        setUser()
-        toast("setting the user")
+        //TODO create new post for logged in user
     }
 
 //    data class Post(val id: String, val user: String, val location: Double, val time: Int, var message: String){
