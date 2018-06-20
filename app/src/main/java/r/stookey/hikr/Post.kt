@@ -14,7 +14,7 @@ import r.stookey.hikr.R.id.tvUsername
 
 class Post: AppCompatActivity(), View.OnClickListener {
 
-    val TAG: String = "POST"
+    private val TAG: String = "POST"
 
     private lateinit var username: String
     private lateinit var email: String
@@ -36,6 +36,7 @@ class Post: AppCompatActivity(), View.OnClickListener {
         if (intent.hasExtra("email") && intent.hasExtra("username")) {
             tvUsername.text = intent.getStringExtra("username")
             toast("logged in as " + tvUsername.text)
+
         } else if (intent.hasExtra("newUserEmail") && intent.hasExtra("newUserUsername")) {
             tvUsername.text = intent.getStringExtra("newUserUsername")
             toast("new user registered, username is " + tvUsername.text)
