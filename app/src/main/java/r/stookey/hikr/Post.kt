@@ -35,12 +35,10 @@ class Post: AppCompatActivity(), View.OnClickListener {
     private fun determineUser() {
         if (intent.hasExtra("email") && intent.hasExtra("username")) {
             tvUsername.text = intent.getStringExtra("username")
-            toast("logged in as " + tvUsername.text)
-
+            Log.d(TAG, "determineUser(): logged in as " + tvUsername.text)
         } else if (intent.hasExtra("newUserEmail") && intent.hasExtra("newUserUsername")) {
             tvUsername.text = intent.getStringExtra("newUserUsername")
-            toast("new user registered, username is " + tvUsername.text)
-            Log.d(TAG, "setUser(): New User Registered")
+            Log.d(TAG, "determineUser(): new user registered, username is " + tvUsername.text)
         }
     }
 

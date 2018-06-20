@@ -20,7 +20,7 @@ import studios.codelight.smartloginlibrary.util.SmartLoginException
 
 
 class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
-    val TAG: String = "Login"
+    private val TAG: String = "Login"
 
     private val smartLogin: SmartLogin = SmartLoginFactory.build(LoginType.CustomLogin)
     private val config: SmartLoginConfig = SmartLoginConfig(this, this)
@@ -42,7 +42,6 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
         bLogin.setOnClickListener(this)
     }
 
-
     override fun onStart() {
         super.onStart()
         firebaseUser = firebaseAuth?.currentUser
@@ -55,42 +54,50 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
         smartLogin.login(config)
     }
 
-    override fun onLoginSuccess(user: SmartUser?) {
-        if(credentialCheck){
-            loginIntent = Intent(this, Post::class.java)
-            loginIntent.putExtra("email", user?.email)
-            loginIntent.putExtra("username", user!!.username)
-            startActivity(loginIntent)
-        }
-    }
-
     override fun doCustomLogin(): SmartUser {
-        user.username = login()?.displayName
-        user.email = login()?.email
+        if(password.isBlank() || email.isBlank()){
+            toast("Enter an email and password")
+        } else{
+            user.username = login()?.displayName
+            user.email = login()?.email
+        }
         return user
     }
 
     private fun login(): FirebaseUser? {
-        if (email == "" || password == "") {
-            toast("Enter an email and a password")
-            firebaseUser = null
-        } else {
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    firebaseUser = firebaseAuth.currentUser
-                    updateStatus("Login successful, firebase user = " + firebaseUser?.displayName.toString())
-                    credentialCheck = true
-                } else if (!it.isSuccessful) {
-                    Log.e(TAG, "onComplete: Failed = " + it.exception?.message)
-                    firebaseUser = null
-                }
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+            if (it.isSuccessful) {
+                firebaseUser = firebaseAuth.currentUser
+                updateStatus("Login successful, firebase user = " + firebaseUser?.displayName.toString())
+                credentialCheck = true
+            } else if (!it.isSuccessful) {
+                toast("password or email is incorrect")
+                Log.e(TAG, "onComplete: Failed = " + it.exception?.message)
+                firebaseUser = null
             }
         }
         updateStatus("login(): firebase user = " + firebaseUser.toString())
         return firebaseUser
     }
 
+    override fun onLoginSuccess(user: SmartUser?) {
+        if (firebaseUser == null) {
+            Log.d(TAG, "onLoginSuccess(): something went wrong")
+        } else {
+            if (credentialCheck) {
+                loginIntent = Intent(this, Post::class.java)
+                loginIntent.putExtra("email", user?.email)
+                loginIntent.putExtra("username", user!!.username)
+                startActivity(loginIntent)
+            }
+        }
+    }
 
+
+
+    private fun updateStatus(status: String){
+        Log.d(TAG, status)
+    }
 
     override fun doCustomSignup(): SmartUser {
         return SmartUser()
@@ -101,12 +108,7 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
         smartLogin.onActivityResult(requestCode, resultCode, data, config)
     }
 
-    fun updateStatus(status: String){
-        Log.d(TAG, status)
-    }
-
     override fun onLoginFailure(e: SmartLoginException?) {
     }
-
 
 }
