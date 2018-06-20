@@ -26,8 +26,8 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
 
     lateinit var loginIntent: Intent
 
-     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-     private var firebaseUser: FirebaseUser? = firebaseAuth.currentUser
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var firebaseUser: FirebaseUser? = firebaseAuth.currentUser
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,10 +52,9 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
     override fun onLoginSuccess(user: SmartUser?) {
         loginIntent = Intent(this, Post::class.java)
         loginIntent.putExtra("email", user?.email)
-        loginIntent.putExtra("username", user?.username)
-        Log.d(TAG, "onLoginSuccess: "+ user.toString())
+        loginIntent.putExtra("username", user!!.username)
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(loginIntent)
-
     }
 
     override fun onLoginFailure(e: SmartLoginException?) {
@@ -63,27 +62,29 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
     }
 
     override fun doCustomLogin(): SmartUser {
-        //Todo check firebase database for user information and accept or deny login (Authenticate user)
-        //Todo get user from firebase database with username's email address to pass to the post class
-        //where email equals etEmail if password equals etPassword
+        user.username = login()!!.displayName
+        user.email = login()!!.email
+        updateStatus(user.username.toString() + " " + user.email.toString())
+        return user
+    }
+
+    private fun login(): FirebaseUser? {
         firebaseAuth.signInWithEmailAndPassword(etEmail.text.toString(), etPassword.text.toString()).addOnCompleteListener {
             if(it.isSuccessful){
+                updateStatus("Login successful, logged in as " + firebaseUser!!.displayName.toString())
                 firebaseUser = firebaseAuth.currentUser
-                user.username = firebaseUser?.displayName
-                user.email = firebaseUser?.email
-                updateStatus("Logged in")
             } else{
                 updateStatus("Unable to login, firebase sign in failed")
                 toast("Unable to login, check email and password")
             }
         }
-        return user
+        updateStatus(firebaseUser.toString())
+        return firebaseUser
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         smartLogin.onActivityResult(requestCode, resultCode, data, config)
-
     }
 
     fun updateStatus(status: String){

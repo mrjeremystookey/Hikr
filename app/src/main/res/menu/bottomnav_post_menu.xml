@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_create"
+        android:enabled="true"
+        android:title="Create"
+        android:icon="@drawable/ic_baseline_add_24px"
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        />
+    <item
         android:id="@+id/action_posts"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_horizontal_split_24px"
@@ -16,4 +24,6 @@
         android:title="@string/profile_bottom_bar"
         android:visible="true"
         app:showAsAction="ifRoom" />
+
+
 </menu>
