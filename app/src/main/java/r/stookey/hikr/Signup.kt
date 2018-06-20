@@ -36,7 +36,6 @@ class Signup: AppCompatActivity(), View.OnClickListener{
     }
 
     private fun initialize(){
-        next = findViewById(R.id.bNext)
         next.setOnClickListener(this)
         username = etUsername.text.toString()
         email = etEmail.text.toString()
@@ -46,7 +45,7 @@ class Signup: AppCompatActivity(), View.OnClickListener{
 
     override fun onStart() {
         super.onStart()
-        currentUser = firebaseAuth.currentUser
+        currentUser = firebaseAuth!!.currentUser
         updateStatus("onStart(): Logged in as " + currentUser?.displayName.toString())
     }
 
@@ -91,6 +90,7 @@ class Signup: AppCompatActivity(), View.OnClickListener{
             if (it.isSuccessful) {
                 creationIntent.putExtra("newUserUsername", currentUser?.displayName)
                 creationIntent.putExtra("newUserEmail", currentUser?.email)
+                creationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(creationIntent)
                 updateStatus("updateUser(): " + currentUser?.email + " " + currentUser?.displayName)
             } else {

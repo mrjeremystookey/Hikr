@@ -28,13 +28,11 @@ class Entry: AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?){
         when (v?.id) {
             R.id.bLogin -> {
-                toast("Login started")
                 val loginIntent = Intent(this, Login::class.java)
                 startActivity(loginIntent)
 
             }
             R.id.bSignup -> {
-                toast("Signup started")
                 val signUpIntent = Intent(this, Signup::class.java)
                 startActivity(signUpIntent)
             }
