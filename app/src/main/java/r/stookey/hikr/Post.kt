@@ -16,9 +16,6 @@ class Post: AppCompatActivity(), View.OnClickListener {
 
     private val TAG: String = "POST"
 
-    private lateinit var username: String
-    private lateinit var email: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

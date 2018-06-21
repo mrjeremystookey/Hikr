@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.signup.*
 import org.jetbrains.anko.toast
 
 class Signup: AppCompatActivity(), View.OnClickListener{
-    private var TAG: String = "Signup"
+    private var TAG: String = "SIGNUP"
 
     private lateinit var next: Button
     private lateinit var creationIntent: Intent

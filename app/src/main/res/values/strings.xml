@@ -25,6 +25,7 @@
 
     <string name="profile_bottom_bar">Profile</string>
     <string name="posts_bottom_bar">Posts</string>
+    <string name="incorrect_password_email">email address or password is incorrect</string>
 
 
 </resources>

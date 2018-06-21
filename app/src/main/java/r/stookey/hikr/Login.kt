@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.View.VISIBLE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.login.*
@@ -20,7 +21,7 @@ import studios.codelight.smartloginlibrary.util.SmartLoginException
 
 
 class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
-    private val TAG: String = "Login"
+    private val TAG: String = "LOGIN"
 
     private val smartLogin: SmartLogin = SmartLoginFactory.build(LoginType.CustomLogin)
     private val config: SmartLoginConfig = SmartLoginConfig(this, this)
@@ -56,7 +57,8 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
 
     override fun doCustomLogin(): SmartUser {
         if(password.isBlank() || email.isBlank()){
-            toast("Enter an email and password")
+            tvIncorrectEmailPassword.text = "enter an email address and password"
+            tvIncorrectEmailPassword.visibility = VISIBLE
         } else{
             user.username = login()?.displayName
             user.email = login()?.email
@@ -71,7 +73,8 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
                 updateStatus("Login successful, firebase user = " + firebaseUser?.displayName.toString())
                 credentialCheck = true
             } else if (!it.isSuccessful) {
-                toast("password or email is incorrect")
+                tvIncorrectEmailPassword.text = "incorrect email and/or password"
+                tvIncorrectEmailPassword.visibility = VISIBLE
                 Log.e(TAG, "onComplete: Failed = " + it.exception?.message)
                 firebaseUser = null
             }
@@ -86,7 +89,7 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
         } else {
             if (credentialCheck) {
                 loginIntent = Intent(this, Post::class.java)
-                loginIntent.putExtra("email", user?.email)
+                loginIntent.putExtra("email", user!!.email)
                 loginIntent.putExtra("username", user!!.username)
                 startActivity(loginIntent)
             }

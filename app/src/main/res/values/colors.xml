@@ -8,4 +8,5 @@
     <color name="TextColor">#ffffff</color>
     <color name="accent">#2e7d32</color>
     <color name="accent_brown">#3e2723</color>
+    <color name="pink_error">#ff4081</color>
 </resources>
