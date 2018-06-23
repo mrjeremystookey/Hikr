@@ -30,7 +30,7 @@
             android:label="Create Account"></activity>
 
         <activity android:name=".Post"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustPan">
         </activity>
 
 

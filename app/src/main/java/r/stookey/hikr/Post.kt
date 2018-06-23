@@ -1,7 +1,6 @@
 package r.stookey.hikr
 
 
-import android.app.FragmentManager
 import android.os.Bundle
 
 
@@ -19,8 +18,9 @@ class Post: AppCompatActivity(), View.OnClickListener {
 
     private val TAG: String = "POST"
 
-    private lateinit var textString: String
+    private var postFragment = PostFragment.newInstance()
     private lateinit var message: Message
+
 
 
 
@@ -37,6 +37,9 @@ class Post: AppCompatActivity(), View.OnClickListener {
         determineUser()
     }
 
+
+
+    //Has the user logged in or did they just register?
     private fun determineUser() {
         if (intent.hasExtra("email") && intent.hasExtra("username")) {
            // tvUsername.text = intent.getStringExtra("username")
@@ -48,10 +51,7 @@ class Post: AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        //TODO create new post for logged in user
-        var postFragment = PostFragment.newInstance()
-        //val fragmentTransaction = fragmentManager.beginTransaction()
-        //fragmentTransaction.commit()
+        //TODO Show submenu for new Photo, Video, or Audio recording
         toast(postFragment.getText())
     }
 

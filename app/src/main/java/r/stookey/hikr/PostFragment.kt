@@ -12,14 +12,13 @@ import org.jetbrains.anko.toast
 
 class PostFragment: Fragment() {
 
-    private val TAG = "POSTFRAGMENT"
+    private val TAG = "PostFragment"
 
     private lateinit var messageText: String
 
     companion object {
         fun newInstance() = PostFragment()
     }
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -42,11 +41,16 @@ class PostFragment: Fragment() {
     }
 
 
+
+    //TODO a Watcher for the EditText to automatically save what the user has written
     fun getText(): String{
         messageText = "the button has been clicked"
         Log.d(TAG, "getText(): " + messageText)
         return messageText
     }
+
+    //TODO When Action Button is pressed, three options for Video, Audio, and Photo appear as subitems
+
 
     //TODO Upload the string from the edit text to firebase DB using the UID as the primary key
 
