@@ -50,6 +50,8 @@ class PostFragment: Fragment() {
     }
 
     //TODO When Action Button is pressed, three options for Video, Audio, and Photo appear as subitems
+    //Open up camera explicit intent to capture a photo or video object
+
 
 
     //TODO Upload the string from the edit text to firebase DB using the UID as the primary key

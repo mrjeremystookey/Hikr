@@ -21,6 +21,9 @@ class Post: AppCompatActivity(), View.OnClickListener {
     private var postFragment = PostFragment.newInstance()
     private lateinit var message: Message
 
+    private lateinit var userID: String
+    private lateinit var username: String
+    private lateinit var email: String
 
 
 
@@ -38,16 +41,18 @@ class Post: AppCompatActivity(), View.OnClickListener {
     }
 
 
-
-    //Has the user logged in or did they just register?
     private fun determineUser() {
         if (intent.hasExtra("email") && intent.hasExtra("username")) {
-           // tvUsername.text = intent.getStringExtra("username")
-           // Log.d(TAG, "determineUser(): logged in as " + tvUsername.text)
+            username = intent.getStringExtra("username")
+            email = intent.getStringExtra("email")
+            userID = intent.getStringExtra("userID")
         } else if (intent.hasExtra("newUserEmail") && intent.hasExtra("newUserUsername")) {
-           // tvUsername.text = intent.getStringExtra("newUserUsername")
-           //  Log.d(TAG, "determineUser(): new user registered, username is " + tvUsername.text)
+            username = intent.getStringExtra("newUserUsername")
+            email = intent.getStringExtra("newUserEmail")
+            userID = intent.getStringExtra("userID")
         }
+        val menuItem = bottomNavigationView.menu.findItem(R.id.action_profile)
+        menuItem.title = username
     }
 
     override fun onClick(v: View?) {

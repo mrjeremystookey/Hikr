@@ -62,6 +62,7 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
         } else{
             user.username = login()?.displayName
             user.email = login()?.email
+            user.userId = login()?.uid
         }
         return user
     }
@@ -90,7 +91,8 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
             if (credentialCheck) {
                 loginIntent = Intent(this, Post::class.java)
                 loginIntent.putExtra("email", user!!.email)
-                loginIntent.putExtra("username", user!!.username)
+                loginIntent.putExtra("username", user.username)
+                loginIntent.putExtra("userID", user.userId)
                 startActivity(loginIntent)
             }
         }
