@@ -7,68 +7,49 @@
     android:background="@color/PrimaryGreen"
     android:fitsSystemWindows="false">
 
-    <TextView
-        android:id="@+id/tvLoggedIn"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:elevation="3dp"
-        android:text="Logged in as "
-        android:textColor="@color/TextColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:elevation="3dp"
-        android:text="TextView"
-        android:textColor="@color/TextColor"
-        app:layout_constraintStart_toEndOf="@+id/tvLoggedIn"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <EditText
-        android:id="@+id/etPost"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/post_fragment_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/button_corners"
         android:elevation="3dp"
-        android:ems="10"
-        android:fitsSystemWindows="true"
-        android:inputType="textMultiLine"
-        android:padding="4dp"
-        android:textColor="@color/TextColor"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLoggedIn" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <fragment
+            android:id="@+id/post_fragment"
+            android:name="r.stookey.hikr.PostFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAddPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="320dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="512dp"
         android:clickable="true"
         android:fitsSystemWindows="true"
         app:backgroundTint="@color/accent"
         app:elevation="5dp"
         app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="@+id/etPost"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/etPost"
-        app:layout_constraintVertical_bias="0.971"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:layout_constraintTop_toTopOf="@+id/post_fragment_container"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:focusable="true" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -87,4 +68,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottomnav_post_menu" />
+
 </android.support.constraint.ConstraintLayout>
