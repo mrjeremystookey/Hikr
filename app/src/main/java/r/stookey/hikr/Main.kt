@@ -13,9 +13,10 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.main_page.*
+import r.stookey.hikr.dummy.DummyContent
 
 
-class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
+class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener, MessageFragment.OnListFragmentInteractionListener {
 
     private val TAG: String = "POST"
 
@@ -28,7 +29,7 @@ class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNa
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_all_posts -> {
-                val allPostsFragment = AllPostsFragment.newInstance()
+                val allPostsFragment = MessageFragment.newInstance(1)
                 addFragment(allPostsFragment)
             }
             R.id.action_user_profile -> {
@@ -75,16 +76,6 @@ class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNa
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
+    }
 }

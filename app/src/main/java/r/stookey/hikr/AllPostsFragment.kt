@@ -16,7 +16,7 @@ class AllPostsFragment: Fragment(), View.OnClickListener{
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.all_posts_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_message_list, container, false)
     }
 
     override fun onClick(v: View?) {
