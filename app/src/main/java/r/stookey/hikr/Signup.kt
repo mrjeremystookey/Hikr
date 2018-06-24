@@ -9,7 +9,7 @@ import android.widget.Button
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import kotlinx.android.synthetic.main.signup.*
+import kotlinx.android.synthetic.main.register_flow.*
 import org.jetbrains.anko.toast
 
 class Signup: AppCompatActivity(), View.OnClickListener{
@@ -30,7 +30,7 @@ class Signup: AppCompatActivity(), View.OnClickListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.signup)
+        setContentView(R.layout.register_flow)
 
         next = findViewById(R.id.bNext)
         next.setOnClickListener(this)
@@ -38,7 +38,7 @@ class Signup: AppCompatActivity(), View.OnClickListener{
 
     override fun onStart() {
         super.onStart()
-        currentUser = firebaseAuth!!.currentUser
+        currentUser = firebaseAuth.currentUser
         updateStatus("onStart(): Logged in as " + currentUser?.displayName.toString())
     }
 
@@ -69,36 +69,37 @@ class Signup: AppCompatActivity(), View.OnClickListener{
     }
 
     private fun createNewUser(){
-        updateStatus("attempting firebase user account creation")
-        creationIntent = Intent(this, Post::class.java)
+        updateStatus("attempting firebase user_page_fragment account creation")
+        creationIntent = Intent(this, Main::class.java)
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 currentUser = firebaseAuth.currentUser
                 updateUser()
             } else {
                 updateStatus("createNewUser(): " + it.exception)
-                toast("Unable to create user")
+                toast("Unable to create user_page_fragment")
             }
         }
         }
 
     private fun updateUser(){
-        updateStatus("updating user info")
+        updateStatus("updating user_page_fragment info")
         profileUpdates.setDisplayName(etUsername.text.toString())
         currentUser?.updateProfile(profileUpdates.build())?.addOnCompleteListener {
             if (it.isSuccessful) {
                 updateStatus("updateUser(): " + currentUser?.email + " " + currentUser?.displayName)
                 launchPost()
             } else {
-                updateStatus("Unable to update user profile")
+                updateStatus("Unable to update user_page_fragment profile")
             }
         }
     }
 
     private fun launchPost(){
-        updateStatus("launching Post activity as logged in user")
-        creationIntent.putExtra("newUserUsername", currentUser?.displayName)
-        creationIntent.putExtra("newUserEmail", currentUser?.email)
+        updateStatus("launching Post activity as logged in user_page_fragment")
+        creationIntent.putExtra("username", currentUser?.displayName)
+        creationIntent.putExtra("email", currentUser?.email)
+        creationIntent.putExtra("userID", currentUser?.uid)
         creationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(creationIntent)
     }

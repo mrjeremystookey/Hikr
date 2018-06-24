@@ -9,19 +9,21 @@
         android:id="@+id/etTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/button_corners"
+        android:elevation="5dp"
         android:ems="10"
         android:hint="TItle"
         android:inputType="textPersonName"
         android:padding="12dp"
         android:textColorHint="#757575"
-        app:layout_constraintBottom_toTopOf="@+id/etPostFragment"
+        app:layout_constraintBottom_toTopOf="@+id/etText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/etPostFragment"
+        android:id="@+id/etText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -34,9 +36,28 @@
         android:textColor="@color/TextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etTitle">
 
     </EditText>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="316dp"
+        android:layout_marginTop="540dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/accent"
+        app:elevation="7dp"
+        app:fabSize="normal"
+        app:layout_constraintEnd_toEndOf="@+id/etText"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </android.support.constraint.ConstraintLayout>

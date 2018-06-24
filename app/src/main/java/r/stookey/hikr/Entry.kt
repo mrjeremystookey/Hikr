@@ -6,16 +6,13 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
-import org.jetbrains.anko.toast
-
-
 
 
 class Entry: AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.entry)
+        setContentView(R.layout.entry_point)
 
 
         val btnSignUp: Button = findViewById(R.id.bSignup)

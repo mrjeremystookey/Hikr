@@ -1,62 +1,68 @@
 package r.stookey.hikr
 
-import android.app.Fragment
-import android.app.FragmentManager
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.post_fragment.*
-import org.jetbrains.anko.toast
+import kotlinx.android.synthetic.main.new_post_fragment.*
 
-class PostFragment: Fragment() {
+class PostFragment: Fragment(), View.OnClickListener {
 
-    private val TAG = "PostFragment"
+    private val TAG = "ProfileFragment"
 
-    private lateinit var messageText: String
+    private lateinit var messageString: String
+    private lateinit var titleString: String
 
     companion object {
         fun newInstance() = PostFragment()
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.post_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.new_post_fragment, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onClick(v: View?) {
+
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
-
-    //When Parent activity is completed
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated(): parent activity fully loaded" )
+        etText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                textChanged()
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+        etTitle.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                textChanged()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
     }
 
-
-
-    //TODO a Watcher for the EditText to automatically save what the user has written
-    fun getText(): String{
-        messageText = "the button has been clicked"
-        Log.d(TAG, "getText(): " + messageText)
-        return messageText
+    private fun textChanged(){
+        //TODO a Watcher for the EditText to automatically save what the user_page_fragment has written
+        messageString = etText.text.toString()
+        titleString = etTitle.text.toString()
+        //TODO Update message object as the title and text fields change
     }
-
-    //TODO When Action Button is pressed, three options for Video, Audio, and Photo appear as subitems
-    //Open up camera explicit intent to capture a photo or video object
-
-
-
-    //TODO Upload the string from the edit text to firebase DB using the UID as the primary key
-
-
-
 
 }

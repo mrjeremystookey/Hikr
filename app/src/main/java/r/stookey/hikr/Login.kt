@@ -3,15 +3,12 @@ package r.stookey.hikr
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.View.VISIBLE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.login.*
-import kotlinx.android.synthetic.main.signup.*
-import org.jetbrains.anko.toast
+import kotlinx.android.synthetic.main.login_flow.*
 import studios.codelight.smartloginlibrary.*
 import studios.codelight.smartloginlibrary.users.SmartUser
 import studios.codelight.smartloginlibrary.util.SmartLoginException
@@ -39,17 +36,17 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login)
+        setContentView(R.layout.login_flow)
         bLogin.setOnClickListener(this)
     }
 
     override fun onStart() {
         super.onStart()
-        firebaseUser = firebaseAuth?.currentUser
+        firebaseUser = firebaseAuth.currentUser
     }
 
     override fun onClick(v: View?) {
-        Log.d(TAG, "onClick(): Attemping login...")
+        Log.d(TAG, "onClick(): Attemping login_flow...")
         email = etEmailLogin?.text.toString()
         password = etPasswordLogin?.text.toString()
         smartLogin.login(config)
@@ -71,7 +68,7 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 firebaseUser = firebaseAuth.currentUser
-                updateStatus("Login successful, firebase user = " + firebaseUser?.displayName.toString())
+                updateStatus("Login successful, firebase user_page_fragment = " + firebaseUser?.displayName.toString())
                 credentialCheck = true
             } else if (!it.isSuccessful) {
                 tvIncorrectEmailPassword.text = "incorrect email and/or password"
@@ -80,7 +77,7 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
                 firebaseUser = null
             }
         }
-        updateStatus("login(): firebase user = " + firebaseUser.toString())
+        updateStatus("login_flow(): firebase user_page_fragment = " + firebaseUser.toString())
         return firebaseUser
     }
 
@@ -89,7 +86,7 @@ class Login: AppCompatActivity(), View.OnClickListener, SmartLoginCallbacks {
             Log.d(TAG, "onLoginSuccess(): something went wrong")
         } else {
             if (credentialCheck) {
-                loginIntent = Intent(this, Post::class.java)
+                loginIntent = Intent(this, Main::class.java)
                 loginIntent.putExtra("email", user!!.email)
                 loginIntent.putExtra("username", user.username)
                 loginIntent.putExtra("userID", user.userId)

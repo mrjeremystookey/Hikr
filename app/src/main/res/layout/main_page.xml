@@ -8,27 +8,14 @@
     android:fitsSystemWindows="true">
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabAddPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="316dp"
-        android:layout_marginTop="512dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="@color/accent"
-        app:elevation="7dp"
-        app:fabSize="normal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/post_fragment_container"
+        android:id="@+id/main_fragment_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:elevation="5dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,14 +23,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <fragment
-            android:id="@+id/post_fragment"
+            android:id="@+id/main_fragment"
             android:name="r.stookey.hikr.PostFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
