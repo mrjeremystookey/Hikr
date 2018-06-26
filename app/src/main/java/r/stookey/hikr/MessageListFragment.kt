@@ -1,6 +1,7 @@
 package r.stookey.hikr
 
 import android.content.Context
+
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -9,26 +10,43 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import r.stookey.hikr.dummy.DummyContent
-import r.stookey.hikr.dummy.DummyContent.DummyItem
 
+import r.stookey.hikr.dummy.DummyContent.DummyItem
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
- * [MessageFragment.OnListFragmentInteractionListener] interface.
+ * [MessageListFragment.OnListFragmentInteractionListener] interface.
  */
-class MessageFragment : Fragment() {
+class MessageListFragment : Fragment() {
 
     // TODO: Customize parameters
     private var columnCount = 1
     private var listener: OnListFragmentInteractionListener? = null
+    private lateinit var userID: String
+    private lateinit var email: String
+    companion object {
+
+        const val ARG_COLUMN_COUNT = "column-count"
+
+        @JvmStatic
+        fun newInstance(userID: String, email: String, columnCount: Int) =
+                MessageListFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt(ARG_COLUMN_COUNT, columnCount)
+                        putString("userID", userID)
+                        putString("email", email)
+                    }
+                }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
+            userID = it.getString("userID")
+            email = it.getString("email")
         }
     }
 
@@ -43,7 +61,7 @@ class MessageFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyMessageRecyclerViewAdapter(DummyContent.ITEMS, listener)
+                adapter = MyMessageListRecyclerViewAdapter(DummyContent.ITEMS, listener)
             }
         }
         return view
@@ -62,7 +80,6 @@ class MessageFragment : Fragment() {
         super.onDetach()
         listener = null
     }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -77,20 +94,6 @@ class MessageFragment : Fragment() {
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onListFragmentInteraction(item: DummyItem?)
-    }
 
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-                MessageFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(ARG_COLUMN_COUNT, columnCount)
-                    }
-                }
     }
 }

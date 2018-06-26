@@ -10,15 +10,24 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.new_post_fragment.*
 
-class PostFragment: Fragment(), View.OnClickListener {
+class PostFragment(): Fragment(), View.OnClickListener {
 
     private val TAG = "ProfileFragment"
 
     private lateinit var messageString: String
     private lateinit var titleString: String
+    private lateinit var userID: String
+    private lateinit var username: String
 
     companion object {
-        fun newInstance() = PostFragment()
+        fun newInstance(userID: String, username: String): PostFragment {
+            val args = Bundle()
+            args.putString("userID", userID)
+            args.putString("username", username)
+            val fragment = PostFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,6 +36,13 @@ class PostFragment: Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
 
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        userID = arguments!!.getString("userID")
+        username = arguments!!.getString("username")
+        Log.d(TAG, userID + username)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -65,4 +81,8 @@ class PostFragment: Fragment(), View.OnClickListener {
         //TODO Update message object as the title and text fields change
     }
 
+
+    private fun uploadText(){
+
+    }
 }

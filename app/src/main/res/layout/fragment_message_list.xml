@@ -18,5 +18,5 @@
     android:layout_height="match_parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    tools:context=".MessageFragment"
+    tools:context=".MessageListFragment"
     tools:listitem="@layout/fragment_message" />

@@ -3,7 +3,6 @@ package r.stookey.hikr
 
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
-import android.support.design.internal.BottomNavigationMenu
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 
@@ -16,7 +15,7 @@ import kotlinx.android.synthetic.main.main_page.*
 import r.stookey.hikr.dummy.DummyContent
 
 
-class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener, MessageFragment.OnListFragmentInteractionListener {
+class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNavigationItemSelectedListener, MessageListFragment.OnListFragmentInteractionListener {
 
     private val TAG: String = "POST"
 
@@ -29,15 +28,15 @@ class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNa
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_all_posts -> {
-                val allPostsFragment = MessageFragment.newInstance(1)
+                val allPostsFragment = MessageListFragment.newInstance(userID, email, 1)
                 addFragment(allPostsFragment)
             }
             R.id.action_user_profile -> {
-                val profileFragment = ProfileFragment.newInstance()
+                val profileFragment = ProfileFragment.newInstance(userID, email)
                 addFragment(profileFragment)
             }
             R.id.action_new_post -> {
-                val postFragment = PostFragment.newInstance()
+                val postFragment = PostFragment.newInstance(userID, email)
                 addFragment(postFragment)
             }
         }
@@ -51,7 +50,7 @@ class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNa
                 .replace(R.id.content, fragment, fragment.tag)
                 .addToBackStack(fragment.javaClass.getSimpleName())
                 .commit()
-        Log.d(TAG, "addFragment(): fragment changed" + fragment.tag)
+        Log.d(TAG, "addFragment(): fragment changed")
     }
 
     //TODO Loading just the new post fragment and not switching to the others.

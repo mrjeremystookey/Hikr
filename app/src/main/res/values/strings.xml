@@ -41,4 +41,7 @@
     <string name="testLocationString">85.443, -84.323</string>
     <string name="testDateString">June 3rd, 2018</string>
 
+    <string name="logged_in_as">Logged in as: </string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="number_of_posts">Number of Posts: </string>
 </resources>
