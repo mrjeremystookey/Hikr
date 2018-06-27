@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.new_post_fragment.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PostFragment(): Fragment(), View.OnClickListener {
 
@@ -19,6 +21,9 @@ class PostFragment(): Fragment(), View.OnClickListener {
     private lateinit var titleString: String
     private lateinit var userID: String
     private lateinit var username: String
+
+    val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+    private lateinit var message: Message
 
 
     companion object {
@@ -45,6 +50,8 @@ class PostFragment(): Fragment(), View.OnClickListener {
         userID = arguments!!.getString("userID")
         username = arguments!!.getString("username")
         Log.d(TAG, userID + username)
+
+        //TODO Permissions check for Course and Fine location
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -80,8 +87,12 @@ class PostFragment(): Fragment(), View.OnClickListener {
         //TODO a Watcher for the EditText to automatically save what the user_page_fragment has written
         messageString = etText.text.toString()
         titleString = etTitle.text.toString()
+        val currentDate = sdf.format(Date())
+//        message = Message(titleString, userID, currentDate, )
         //TODO Update message object as the title and text fields change
     }
+
+
 
 
     private fun uploadText(){

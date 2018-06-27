@@ -20,7 +20,6 @@ import r.stookey.hikr.dummy.DummyContent.DummyItem
  */
 class MessageListFragment : Fragment() {
 
-    // TODO: Customize parameters
     private var columnCount = 1
     private var listener: OnListFragmentInteractionListener? = null
     private lateinit var userID: String
