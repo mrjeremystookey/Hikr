@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <EditText
         android:id="@+id/etTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/button_corners"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_corners"
         android:elevation="5dp"
         android:ems="10"
-        android:hint="TItle"
+        android:hint="@string/title"
         android:inputType="textPersonName"
         android:padding="12dp"
-        android:textColorHint="#757575"
-        app:layout_constraintBottom_toTopOf="@+id/etText"
+        android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
 
     <EditText
         android:id="@+id/etText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/button_corners"
+        android:background="@drawable/rounded_corners"
         android:elevation="3dp"
         android:ems="10"
         android:fitsSystemWindows="true"
+        android:hint="@string/post"
         android:inputType="textMultiLine"
         android:padding="8dp"
-        android:textColor="@color/TextColor"
+        android:textColor="@color/textColor"
+        android:textColorHint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -51,7 +52,7 @@
         android:layout_marginTop="540dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="@color/accent"
+        app:backgroundTint="@color/colorPrimaryLight"
         app:elevation="7dp"
         app:fabSize="normal"
         app:layout_constraintEnd_toEndOf="@+id/etText"

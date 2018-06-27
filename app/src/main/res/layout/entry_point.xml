@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@color/PrimaryGreen" />
+        app:srcCompat="@color/colorPrimaryDark" />
 
     <Button
         android:id="@+id/bLogin"
@@ -24,9 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="460dp"
-        android:background="@drawable/button_border"
-        android:text="Login"
-        android:textColor="@android:color/white"
+        android:background="@drawable/rounded_corners"
+        android:text="@string/register_login"
+        android:textColor="@color/textColor"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,9 +36,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="460dp"
-        android:background="@drawable/button_border"
-        android:text="Signup"
-        android:textColor="@android:color/white"
+        android:background="@drawable/rounded_corners"
+        android:text="@string/register_email"
+        android:textColor="@color/textColor"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

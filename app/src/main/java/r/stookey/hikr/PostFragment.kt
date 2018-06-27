@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.new_post_fragment.*
 
 class PostFragment(): Fragment(), View.OnClickListener {
@@ -18,6 +19,7 @@ class PostFragment(): Fragment(), View.OnClickListener {
     private lateinit var titleString: String
     private lateinit var userID: String
     private lateinit var username: String
+
 
     companion object {
         fun newInstance(userID: String, username: String): PostFragment {
@@ -85,4 +87,5 @@ class PostFragment(): Fragment(), View.OnClickListener {
     private fun uploadText(){
 
     }
+
 }

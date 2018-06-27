@@ -23,6 +23,8 @@ class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNa
     private lateinit var username: String
     private lateinit var email: String
 
+
+
     private var content: ConstraintLayout? = null
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -58,6 +60,7 @@ class Main: AppCompatActivity(), View.OnClickListener, BottomNavigationView.OnNa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page)
         Log.d(TAG, "Main activity started")
+        setSupportActionBar(findViewById(R.id.appbar))
         email = intent.getStringExtra("email")
         userID = intent.getStringExtra("userID")
         username = intent.getStringExtra("username")
