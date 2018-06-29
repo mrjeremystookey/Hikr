@@ -22,11 +22,17 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.main_page.*
+import kotlinx.android.synthetic.main.new_post_fragment.*
 import org.jetbrains.anko.toast
 import r.stookey.hikr.dummy.DummyContent
 
-class Main: AppCompatActivity(), View.OnClickListener,
+class Main: AppCompatActivity(),
         BottomNavigationView.OnNavigationItemSelectedListener,
         MessageListFragment.OnListFragmentInteractionListener,
         LocationListener, GoogleApiClient.ConnectionCallbacks,
@@ -46,9 +52,11 @@ class Main: AppCompatActivity(), View.OnClickListener,
     private var mLocation: Location? = null
     private var mLocationManager: LocationManager? = null
     private var mLocationRequest: LocationRequest? = null
-    private val listener: com.google.android.gms.location.LocationListener? = null
     private val UPDATE_INTERVAL = (2 * 1000).toLong()  /* 10 secs */
     private val FASTEST_INTERVAL: Long = 2000 /* 2 sec */
+
+    lateinit var mapFragment: SupportMapFragment
+    lateinit var googleMap: GoogleMap
 
 
     private var content: ConstraintLayout? = null
@@ -59,6 +67,7 @@ class Main: AppCompatActivity(), View.OnClickListener,
         setContentView(R.layout.main_page)
         Log.d(TAG, "Main activity started")
         setSupportActionBar(findViewById(R.id.appbar))
+
         if(!checkPermissions()){
             requestPermissions()
         }
@@ -70,6 +79,10 @@ class Main: AppCompatActivity(), View.OnClickListener,
                 .build()
 
         mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync {
+            googleMap = it
+        }
 
         email = intent.getStringExtra("email")
         userID = intent.getStringExtra("userID")
@@ -77,6 +90,7 @@ class Main: AppCompatActivity(), View.OnClickListener,
         bottomNavigationView.menu.findItem(R.id.action_user_profile).title = username
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
         content = findViewById(R.id.content)
+
     }
 
     override fun onStart() {
@@ -121,12 +135,6 @@ class Main: AppCompatActivity(), View.OnClickListener,
         Log.d(TAG, "addFragment(): fragment changed")
     }
 
-
-    override fun onClick(v: View?) {
-        //TODO Show submenu for new Photo, Video, or Audio recording
-    }
-
-
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates(){
         Log.i(TAG, "Starting location updates")
@@ -144,6 +152,8 @@ class Main: AppCompatActivity(), View.OnClickListener,
     @SuppressLint("MissingPermission")
     override fun onConnected(p0: Bundle?) {
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+        googleMap.addMarker(MarkerOptions().position(LatLng(mLocation!!.latitude, mLocation!!.longitude)).title("Current Location"))
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(mLocation!!.latitude, mLocation!!.longitude), 15f))
 
     }
 
@@ -155,7 +165,6 @@ class Main: AppCompatActivity(), View.OnClickListener,
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
         Log.i(TAG, "Connection failed. Error: " + connectionResult.getErrorCode())
     }
-
 
     private fun checkPermissions(): Boolean{
         val fineLocationCheck = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
