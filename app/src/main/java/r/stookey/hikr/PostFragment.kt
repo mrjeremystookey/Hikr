@@ -18,9 +18,12 @@ import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.new_post_fragment.*
 import permissions.dispatcher.*
+import r.stookey.hikr.R.id.etText
+import r.stookey.hikr.R.id.etTitle
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.jar.Manifest
@@ -33,22 +36,22 @@ class PostFragment(): Fragment(), View.OnClickListener {
     private lateinit var titleString: String
     private lateinit var userID: String
     private lateinit var username: String
-    private lateinit var location: Location
+    private lateinit var location: String
 
     val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
     private lateinit var message: Message
 
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
+
 
 
 
 
     companion object {
-        fun newInstance(userID: String, username: String): PostFragment {
+        fun newInstance(userID: String, username: String, location: String): PostFragment {
             val args = Bundle()
             args.putString("userID", userID)
             args.putString("username", username)
+            args.putString("location", location.toString())
             val fragment = PostFragment()
             fragment.arguments = args
             return fragment
@@ -65,11 +68,10 @@ class PostFragment(): Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //TODO Permissions check for Course and Fine location
-
+        location = arguments!!.getString("location")
         userID = arguments!!.getString("userID")
         username = arguments!!.getString("username")
-        Log.d(TAG, userID + username)
+        Log.d(TAG, userID + username + location)
 
     }
 
@@ -105,12 +107,11 @@ class PostFragment(): Fragment(), View.OnClickListener {
     }
 
     private fun textChanged(){
-        //TODO a Watcher for the EditText to automatically save what the user_page_fragment has written
         messageString = etText.text.toString()
         titleString = etTitle.text.toString()
         val currentDate = sdf.format(Date())
-//        message = Message(titleString, userID, currentDate, )
-        //TODO Update message object as the title and text fields change
+        //TODO Add fake photo and video to test the message upload feature
+        message = Message(titleString, userID, currentDate, messageString, null, null, location)
     }
 
 

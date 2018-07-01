@@ -115,10 +115,16 @@ class Main: AppCompatActivity(),
             }
             R.id.action_user_profile -> {
                 val profileFragment = ProfileFragment.newInstance(userID, email)
+                mapFragment
                 addFragment(profileFragment)
             }
             R.id.action_new_post -> {
-                val postFragment = PostFragment.newInstance(userID, email)
+                val postFragment: PostFragment
+                if(mLocation == null){
+                    postFragment = PostFragment.newInstance(userID, email)
+                }
+                else postFragment(userID, email, )
+
                 addFragment(postFragment)
             }
         }
@@ -193,7 +199,6 @@ class Main: AppCompatActivity(),
             }
         }
     }
-
 
     override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
     }
