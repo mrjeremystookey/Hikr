@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -27,6 +28,7 @@ class Login: AppCompatActivity(), View.OnClickListener {
     private lateinit var loginIntent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_flow)
         bLogin.setOnClickListener(this)
@@ -36,6 +38,8 @@ class Login: AppCompatActivity(), View.OnClickListener {
 
     override fun onStart() {
         super.onStart()
+        if(progressBar.visibility == VISIBLE)
+            progressBar.visibility = INVISIBLE
         firebaseUser = firebaseAuth.currentUser
     }
 
@@ -49,8 +53,8 @@ class Login: AppCompatActivity(), View.OnClickListener {
     }
 
     private fun login() {
-
-        doAsync {
+        tvIncorrectEmailPassword.visibility = INVISIBLE
+        progressBar.visibility = VISIBLE
             firebaseAuth.signInWithEmailAndPassword(etEmailLogin.text.toString(), etPasswordLogin.text.toString()).addOnCompleteListener {
             if (it.isSuccessful) {
                 firebaseUser = firebaseAuth.currentUser
@@ -60,14 +64,14 @@ class Login: AppCompatActivity(), View.OnClickListener {
                 loginIntent.putExtra("userID", user.uid)
                 startActivity(loginIntent)
             } else if (!it.isSuccessful) {
+                tvIncorrectEmailPassword.text = "Email address or password is incorrect"
                 tvIncorrectEmailPassword.visibility = VISIBLE
                 Log.e(TAG, "onComplete: Failed = " + it.exception?.message)
                 firebaseUser = null
+                progressBar.visibility = View.INVISIBLE
             }
-        }
-            runOnUiThread {
-                progressBar.visibility = View.VISIBLE
-            }
+
+
         }
         updateStatus("login_flow(): firebase user_page_fragment = " + firebaseUser.toString())
     }
