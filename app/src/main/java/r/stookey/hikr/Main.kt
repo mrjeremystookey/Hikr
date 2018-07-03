@@ -119,12 +119,7 @@ class Main: AppCompatActivity(),
                 addFragment(profileFragment)
             }
             R.id.action_new_post -> {
-                val postFragment: PostFragment
-                if(mLocation == null){
-                    postFragment = PostFragment.newInstance(userID, email)
-                }
-                else postFragment(userID, email, )
-
+                val postFragment = PostFragment.newInstance(userID, email, mLocation.toString())
                 addFragment(postFragment)
             }
         }

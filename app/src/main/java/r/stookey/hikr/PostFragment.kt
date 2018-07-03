@@ -1,32 +1,17 @@
 package r.stookey.hikr
 
-import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.v4.app.ActivityCompat
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.new_post_fragment.*
-import permissions.dispatcher.*
-import r.stookey.hikr.R.id.etText
-import r.stookey.hikr.R.id.etTitle
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.jar.Manifest
 
 class PostFragment(): Fragment(), View.OnClickListener {
 
@@ -39,9 +24,7 @@ class PostFragment(): Fragment(), View.OnClickListener {
     private lateinit var location: String
 
     val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-    private lateinit var message: Message
-
-
+    private lateinit var post: Post
 
 
 
@@ -51,7 +34,7 @@ class PostFragment(): Fragment(), View.OnClickListener {
             val args = Bundle()
             args.putString("userID", userID)
             args.putString("username", username)
-            args.putString("location", location.toString())
+            args.putString("location", location)
             val fragment = PostFragment()
             fragment.arguments = args
             return fragment
@@ -59,11 +42,15 @@ class PostFragment(): Fragment(), View.OnClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.new_post_fragment, container, false)
+        val view: View = inflater!!.inflate(R.layout.new_post_fragment, container, false)
+        val button: FloatingActionButton = view.findViewById(R.id.fabAddPost)
+        button.setOnClickListener(this)
+        return view
     }
 
     override fun onClick(v: View?) {
-
+        Log.d(TAG, "onClick(): button clicked")
+        post.uploadMessage()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,8 +97,8 @@ class PostFragment(): Fragment(), View.OnClickListener {
         messageString = etText.text.toString()
         titleString = etTitle.text.toString()
         val currentDate = sdf.format(Date())
-        //TODO Add fake photo and video to test the message upload feature
-        message = Message(titleString, userID, currentDate, messageString, null, null, location)
+        post = Post("1" , userID, titleString, currentDate, messageString, location)
+        Log.d(TAG, "textChanged(): " + post.toString())
     }
 
 
