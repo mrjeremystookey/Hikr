@@ -23,6 +23,8 @@ class PostFragment(): Fragment(), View.OnClickListener {
     private lateinit var username: String
     private lateinit var location: String
 
+
+
     val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
     private lateinit var post: Post
 
@@ -43,8 +45,8 @@ class PostFragment(): Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.new_post_fragment, container, false)
-        val button: FloatingActionButton = view.findViewById(R.id.fabAddPost)
-        button.setOnClickListener(this)
+        val fabAddPost: FloatingActionButton = view.findViewById(R.id.fabAddPost)
+        fabAddPost.setOnClickListener(this)
         return view
     }
 
@@ -53,8 +55,18 @@ class PostFragment(): Fragment(), View.OnClickListener {
         post.uploadMessage()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        savedInstanceState?.run {
+            titleString = getString("title")
+            messageString = getString("message")
+
+        }
         location = arguments!!.getString("location")
         userID = arguments!!.getString("userID")
         username = arguments!!.getString("username")
@@ -62,7 +74,11 @@ class PostFragment(): Fragment(), View.OnClickListener {
 
     }
 
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("title", titleString)
+        outState.putString("message", messageString)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

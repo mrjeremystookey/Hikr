@@ -2,15 +2,15 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
 
     <EditText
         android:id="@+id/etTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_corners"
+        android:background="@drawable/post_rounded_corners"
         android:elevation="5dp"
         android:ems="10"
         android:hint="@string/title"
@@ -18,15 +18,14 @@
         android:padding="12dp"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/etText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_corners"
+        android:background="@drawable/post_rounded_corners"
         android:elevation="3dp"
         android:ems="10"
         android:fitsSystemWindows="true"
@@ -55,7 +54,8 @@
         android:layout_marginTop="540dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="@color/colorPrimaryLight"
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:fitsSystemWindows="true"
         app:elevation="7dp"
         app:fabSize="normal"
         app:layout_constraintEnd_toEndOf="@+id/etText"

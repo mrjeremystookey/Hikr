@@ -62,6 +62,7 @@ class Login: AppCompatActivity(), View.OnClickListener {
                 loginIntent.putExtra("email", user!!.email)
                 loginIntent.putExtra("username", user.username)
                 loginIntent.putExtra("userID", user.uid)
+
                 startActivity(loginIntent)
             } else if (!it.isSuccessful) {
                 tvIncorrectEmailPassword.text = "Email address or password is incorrect"
@@ -70,15 +71,9 @@ class Login: AppCompatActivity(), View.OnClickListener {
                 firebaseUser = null
                 progressBar.visibility = View.INVISIBLE
             }
-
-
         }
-        updateStatus("login_flow(): firebase user_page_fragment = " + firebaseUser.toString())
     }
 
-    private fun updateStatus(status: String){
-        Log.d(TAG, status)
-    }
 
 
 
