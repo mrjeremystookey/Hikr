@@ -1,10 +1,12 @@
-package r.stookey.hikr
+package r.stookey.hikr.model
 
 
 import android.util.Log
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
+
 
 @IgnoreExtraProperties
 class Post {
@@ -18,13 +20,16 @@ class Post {
     var text: String? = null
     var location: String? = null
 
+    private val filename = "temp_post"
+
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+
 
 
     constructor()
 
-    constructor(id: String, user: String ,title: String, dateCreated: String ,text: String, location: String?){
-        this.id = id
+    constructor(user: String ,title: String, dateCreated: String ,text: String, location: String?){
+        this.id = UUID.randomUUID().toString()
         this.title = title
         this.text = text
         this.location = location
@@ -51,8 +56,8 @@ class Post {
     }
 
 
-    fun uploadMessage(){
-        //TODO Handle uploading the message to Firebase
+
+    fun uploadPost(){
         val messages = toMap()
         db.collection("Messages")
                 .document(title!!)
@@ -65,8 +70,27 @@ class Post {
                 }
     }
 
-    private fun deleteMessage(){
-        //TODO Remove message from Firebase
+    fun cachePost(){
+        //TODO Save messages to RoomDatabase as they are typed
+        val tempPost = createTempFile(filename,null, null)
+
+    }
+
+    fun deletePost(){
+
+    }
+
+    fun editPost(){
+
+    }
+
+
+    fun pinPost(){
+
+    }
+
+    private fun getLocation(){
+
     }
 
 

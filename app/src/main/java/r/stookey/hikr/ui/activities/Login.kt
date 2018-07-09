@@ -1,5 +1,7 @@
-package r.stookey.hikr
+package r.stookey.hikr.ui.activities
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,22 +12,23 @@ import android.view.View.VISIBLE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.login_flow.*
-import org.jetbrains.anko.custom.onUiThread
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.runOnUiThread
+import r.stookey.hikr.viewmodel.UserViewModel
+import r.stookey.hikr.R
 
 
 class Login: AppCompatActivity(), View.OnClickListener {
 
     private val TAG: String = "LOGIN"
 
-
+    private val userViewModel by lazy {
+        ViewModelProviders.of(this).get(UserViewModel::class.java)
+    }
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var firebaseUser: FirebaseUser? = firebaseAuth.currentUser
-    private lateinit var user: User
 
     private lateinit var loginIntent: Intent
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -48,31 +51,32 @@ class Login: AppCompatActivity(), View.OnClickListener {
             tvIncorrectEmailPassword.visibility = VISIBLE
             return
         }
-        Log.d(TAG, "onClick(): Attemping login_flow...")
         login()
     }
 
     private fun login() {
         tvIncorrectEmailPassword.visibility = INVISIBLE
         progressBar.visibility = VISIBLE
-            firebaseAuth.signInWithEmailAndPassword(etEmailLogin.text.toString(), etPasswordLogin.text.toString()).addOnCompleteListener {
-            if (it.isSuccessful) {
-                firebaseUser = firebaseAuth.currentUser
-                user= User(firebaseUser!!.uid, firebaseUser!!.email, firebaseUser!!.displayName)
-                loginIntent.putExtra("email", user!!.email)
-                loginIntent.putExtra("username", user.username)
-                loginIntent.putExtra("userID", user.uid)
 
+
+
+        val observer:Observer<FirebaseUser> = Observer {
+            if (it != null){
+                loginIntent.putExtra("userID", it.uid)
+                loginIntent.putExtra("username", it.displayName)
                 startActivity(loginIntent)
-            } else if (!it.isSuccessful) {
+            }
+            else {
                 tvIncorrectEmailPassword.text = "Email address or password is incorrect"
                 tvIncorrectEmailPassword.visibility = VISIBLE
-                Log.e(TAG, "onComplete: Failed = " + it.exception?.message)
-                firebaseUser = null
                 progressBar.visibility = View.INVISIBLE
+                Log.d(TAG, "onComplete: Failed)")
             }
         }
+        userViewModel.login(etEmailLogin.text.toString(), etPasswordLogin.text.toString()).observe(this, observer)
     }
+
+
 
 
 

@@ -1,4 +1,4 @@
-package r.stookey.hikr
+package r.stookey.hikr.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.android.synthetic.main.register_flow.*
 import org.jetbrains.anko.toast
+import r.stookey.hikr.R
 
 class Signup: AppCompatActivity(), View.OnClickListener{
     private var TAG: String = "SIGNUP"

@@ -1,4 +1,4 @@
-package r.stookey.hikr
+package r.stookey.hikr.ui.activities
 
 
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
+import r.stookey.hikr.R
 
 
 class Entry: AppCompatActivity(), View.OnClickListener {

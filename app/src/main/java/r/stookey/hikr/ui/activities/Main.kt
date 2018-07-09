@@ -1,7 +1,8 @@
-package r.stookey.hikr
+package r.stookey.hikr.ui.activities
 
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -16,7 +17,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationListener
@@ -28,9 +28,13 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.main_page.*
-import kotlinx.android.synthetic.main.new_post_fragment.*
-import org.jetbrains.anko.toast
+import r.stookey.hikr.viewmodel.PostViewModel
+import r.stookey.hikr.viewmodel.UserViewModel
+import r.stookey.hikr.R
 import r.stookey.hikr.dummy.DummyContent
+import r.stookey.hikr.ui.fragments.MessageListFragment
+import r.stookey.hikr.ui.fragments.PostFragment
+import r.stookey.hikr.ui.fragments.ProfileFragment
 
 class Main: AppCompatActivity(),
         BottomNavigationView.OnNavigationItemSelectedListener,
@@ -43,9 +47,15 @@ class Main: AppCompatActivity(),
     private val permissions = arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
 
 
-    private lateinit var userID: String
-    private lateinit var username: String
-    private lateinit var email: String
+    private val userViewModel by lazy {
+        ViewModelProviders.of(this).get(UserViewModel::class.java)
+    }
+
+    private val postViewModel by lazy {
+        ViewModelProviders.of(this).get(PostViewModel::class.java)
+    }
+
+
 
     //Location declarations
     private var mGoogleApiClient: GoogleApiClient? = null
@@ -58,19 +68,21 @@ class Main: AppCompatActivity(),
     lateinit var mapFragment: SupportMapFragment
     lateinit var googleMap: GoogleMap
 
+    val postFragment: PostFragment = PostFragment()
+
 
     private var content: ConstraintLayout? = null
 
-    //TODO Loading the New Post Fragment on first load
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page)
         Log.d(TAG, "Main activity started")
+        //TODO Show App Bar Action Icons on first load
         setSupportActionBar(findViewById(R.id.appbar))
-
         if(!checkPermissions()){
             requestPermissions()
         }
+
 
         mGoogleApiClient = GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -84,13 +96,15 @@ class Main: AppCompatActivity(),
             googleMap = it
         }
 
-        email = intent.getStringExtra("email")
-        userID = intent.getStringExtra("userID")
-        username = intent.getStringExtra("username")
-        bottomNavigationView.menu.findItem(R.id.action_user_profile).title = username
+
+
+        userViewModel.setUserID(intent.getStringExtra("userID"))
+        postViewModel.setUserID(intent.getStringExtra("userID"))
+
+        bottomNavigationView.menu.findItem(R.id.action_user_profile).title = intent.getStringExtra("username")
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
         content = findViewById(R.id.content)
-
+        addFragment(postFragment)
     }
 
     override fun onStart() {
@@ -98,6 +112,8 @@ class Main: AppCompatActivity(),
         if (mGoogleApiClient != null) {
             mGoogleApiClient!!.connect()
         }
+
+
     }
 
     override fun onStop() {
@@ -110,23 +126,23 @@ class Main: AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_all_posts -> {
-                val allPostsFragment = MessageListFragment.newInstance(userID, email, 1)
+                val allPostsFragment = MessageListFragment.newInstance()
                 addFragment(allPostsFragment)
             }
             R.id.action_user_profile -> {
-                val profileFragment = ProfileFragment.newInstance(userID, email)
+                val profileFragment = ProfileFragment.newInstance()
                 mapFragment
                 addFragment(profileFragment)
             }
             R.id.action_new_post -> {
-                val postFragment = PostFragment.newInstance(userID, email, mLocation.toString())
+                val postFragment = PostFragment.newInstance()
                 addFragment(postFragment)
             }
         }
         return false
     }
 
-    fun addFragment(fragment: Fragment) {
+    private fun addFragment(fragment: Fragment) {
         supportFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out)
@@ -153,9 +169,10 @@ class Main: AppCompatActivity(),
     @SuppressLint("MissingPermission")
     override fun onConnected(p0: Bundle?) {
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+        //Setting Location for the View Model
+        userViewModel.setLocation(mLocation.toString())
         googleMap.addMarker(MarkerOptions().position(LatLng(mLocation!!.latitude, mLocation!!.longitude)).title("Current Location"))
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(mLocation!!.latitude, mLocation!!.longitude), 15f))
-
     }
 
     override fun onConnectionSuspended(p0: Int) {
@@ -167,6 +184,7 @@ class Main: AppCompatActivity(),
         Log.i(TAG, "Connection failed. Error: " + connectionResult.getErrorCode())
     }
 
+    //Permissions remain in the activity, don't go to a ViewModel
     private fun checkPermissions(): Boolean{
         val fineLocationCheck = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
         val courseLocationCheck = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -197,4 +215,6 @@ class Main: AppCompatActivity(),
 
     override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
     }
+
+
 }

@@ -15,7 +15,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <activity
-            android:name="Entry"
+            android:name=".ui.activities.Entry"
             android:label="@string/app_name">
 
             <intent-filter>
@@ -25,14 +25,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Login"
+        <activity android:name=".ui.activities.Login"
             android:label="Login"
             ></activity>
 
-        <activity android:name=".Signup"
+        <activity android:name=".ui.activities.Signup"
             android:label="Create Account"></activity>
 
-        <activity android:name=".Main"
+        <activity android:name=".ui.activities.Main"
             android:windowSoftInputMode="adjustPan">
         </activity>
 

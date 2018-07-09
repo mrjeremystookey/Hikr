@@ -1,46 +1,34 @@
-package r.stookey.hikr
+package r.stookey.hikr.ui.fragments
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import kotlinx.android.synthetic.main.new_post_fragment.*
-import java.text.SimpleDateFormat
-import java.util.*
+import r.stookey.hikr.viewmodel.PostViewModel
+import r.stookey.hikr.viewmodel.UserViewModel
+import r.stookey.hikr.R
 
 class PostFragment(): Fragment(), View.OnClickListener {
 
-    private val TAG = "ProfileFragment"
+    private val TAG = "POSTFRAGMENT"
 
     private lateinit var messageString: String
     private lateinit var titleString: String
-    private lateinit var userID: String
-    private lateinit var username: String
-    private lateinit var location: String
 
 
-
-    val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-    private lateinit var post: Post
-
+    private var userViewModel: UserViewModel = UserViewModel()
+    private var postViewModel: PostViewModel = PostViewModel()
 
 
 
     companion object {
-        fun newInstance(userID: String, username: String, location: String): PostFragment {
-            val args = Bundle()
-            args.putString("userID", userID)
-            args.putString("username", username)
-            args.putString("location", location)
-            val fragment = PostFragment()
-            fragment.arguments = args
-            return fragment
-        }
+
+        fun newInstance(): PostFragment = PostFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,34 +39,35 @@ class PostFragment(): Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        Log.d(TAG, "onClick(): button clicked")
-        post.uploadMessage()
+        //TODO Display Submenu for adding audio recording, video, and photos
     }
 
-    override fun onStart() {
-        super.onStart()
 
+    //TODO Show Menu App Bar
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.post_app_bar, menu)
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    //Todo Minimize the typed message or pin message to map
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId){
+            R.id.pin -> {
+
+            }
+            R.id.menu_map -> {
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        savedInstanceState?.run {
-            titleString = getString("title")
-            messageString = getString("message")
-
-        }
-        location = arguments!!.getString("location")
-        userID = arguments!!.getString("userID")
-        username = arguments!!.getString("username")
-        Log.d(TAG, userID + username + location)
-
+        userViewModel = ViewModelProviders.of(activity!!).get(userViewModel::class.java)
+        postViewModel = ViewModelProviders.of(activity!!).get(postViewModel::class.java)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("title", titleString)
-        outState.putString("message", messageString)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -86,7 +75,6 @@ class PostFragment(): Fragment(), View.OnClickListener {
         etText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 textChanged()
-
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -112,17 +100,10 @@ class PostFragment(): Fragment(), View.OnClickListener {
     private fun textChanged(){
         messageString = etText.text.toString()
         titleString = etTitle.text.toString()
-        val currentDate = sdf.format(Date())
-        post = Post("1" , userID, titleString, currentDate, messageString, location)
-        Log.d(TAG, "textChanged(): " + post.toString())
+        postViewModel.updateText(messageString)
     }
 
 
 
-
-
-    private fun uploadText(){
-
-    }
 
 }

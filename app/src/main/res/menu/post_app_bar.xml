@@ -2,16 +2,20 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <!-- "Pin Message", should appear as action button if possible -->
     <item
         android:id="@+id/pin"
         android:icon="@drawable/pin_icon_appbar"
         android:title="Pin"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:visible="true" />
+
+    <!-- Show Map, Always appear -->
     <item
         android:id="@+id/menu_map"
         android:icon="@drawable/map_icon_appbar"
         android:title="Map"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:visible="true" />
 </menu>

@@ -1,12 +1,13 @@
-package r.stookey.hikr
+package r.stookey.hikr.ui.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import r.stookey.hikr.R
 
 
-import r.stookey.hikr.MessageListFragment.OnListFragmentInteractionListener
+import r.stookey.hikr.ui.fragments.MessageListFragment.OnListFragmentInteractionListener
 import r.stookey.hikr.dummy.DummyContent.DummyItem
 
 /**
@@ -14,6 +15,7 @@ import r.stookey.hikr.dummy.DummyContent.DummyItem
  * specified [OnListFragmentInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
+
 class MyMessageListRecyclerViewAdapter(
         private val mValues: List<DummyItem>,
         private val mListener: OnListFragmentInteractionListener?)
