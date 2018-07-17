@@ -1,5 +1,6 @@
 package r.stookey.hikr.ui.fragments
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 
@@ -14,10 +15,11 @@ import android.view.ViewGroup
 import r.stookey.hikr.viewmodel.PostViewModel
 import r.stookey.hikr.viewmodel.UserViewModel
 import r.stookey.hikr.R
-import r.stookey.hikr.dummy.DummyContent
+import r.stookey.hikr.Repo
 
-import r.stookey.hikr.dummy.DummyContent.DummyItem
+import r.stookey.hikr.model.Post
 import r.stookey.hikr.ui.adapters.MyMessageListRecyclerViewAdapter
+import javax.inject.Inject
 
 /**
  * A fragment representing a list of Items.
@@ -29,7 +31,10 @@ class MessageListFragment : Fragment() {
     private var columnCount = 1
     private var listener: OnListFragmentInteractionListener? = null
 
+    //May not be needed since the PostViewModel already has the UserID
+    private lateinit var mUserID: Any
 
+    @Inject lateinit var repo: Repo
 
     private val userViewModel by lazy {
         ViewModelProviders.of(activity!!).get(UserViewModel::class.java)
@@ -41,11 +46,26 @@ class MessageListFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(): MessageListFragment = MessageListFragment()
+        fun newInstance(userID: String): MessageListFragment {
+            val messageListFragment = MessageListFragment()
+            var args = Bundle()
+            args.putString("createdBy", userID)
+            messageListFragment.arguments = args
+            return messageListFragment
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(arguments!=null){
+            if(arguments!!.containsKey("userID")){
+                mUserID = arguments!!["userID"]
+            }
+        }
+
+
+
+
     }
 
 
@@ -53,19 +73,24 @@ class MessageListFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_message_list, container, false)
 
-        //TODO Call the postViewModel.getAllPostsByUserId function
-        //postViewModel.getAllPostsByUserID()
-
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
+        val listAdapterObserver:Observer<List<Post>> = Observer {
+            if (view is RecyclerView) {
+                with(view) {
+                    layoutManager = when {
+                        columnCount <= 1 -> LinearLayoutManager(context)
+                        else -> GridLayoutManager(context, columnCount)
+                    }
+                    //When the data changes in all post list, data is added to the list
+                    adapter = MyMessageListRecyclerViewAdapter(it!!, listener)
                 }
-                adapter = MyMessageListRecyclerViewAdapter(DummyContent.ITEMS, listener)
             }
         }
+        //TODO Call the postViewModel.getAllPostsByUserId function
+        userViewModel.getAllPostsByUserID().observe(this, listAdapterObserver)
+
+
+        // Set the adapter
+
         return view
     }
 
@@ -95,7 +120,7 @@ class MessageListFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
+        fun onListFragmentInteraction(item: Post?)
 
     }
 }

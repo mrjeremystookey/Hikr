@@ -5,4 +5,5 @@
     <color name="colorPrimaryLight">#60ad5e</color>
     <color name="colorAccent">#FF5722</color>
     <color name="textColor">#CCCCCC</color>
+    <color name="iron">#CCCCCC</color>
 </resources>

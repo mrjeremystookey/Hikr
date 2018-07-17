@@ -13,45 +13,41 @@ class Post {
 
     private val TAG: String = "MESSAGE"
 
-    var id: String? = null
-    var user:String? = null
-    var title: String? = null
-    var dateCreated: String? = null
-    var text: String? = null
-    var location: String? = null
+    lateinit var createdBy:String
+    lateinit var title: String
+    lateinit var dateCreated: String
+    lateinit var text: String
+    lateinit var location: String
+    lateinit var id: String
 
     private val filename = "temp_post"
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-
-
     constructor()
 
-    constructor(user: String ,title: String, dateCreated: String ,text: String, location: String?){
-        this.id = UUID.randomUUID().toString()
+    constructor(id: String?, createdBy: String, title: String, dateCreated: String, text: String, location: String){
         this.title = title
         this.text = text
         this.location = location
         this.dateCreated = dateCreated
-        this.user = user
+        this.createdBy = createdBy
     }
 
     @Exclude
     override fun toString(): String {
-        return "Post(id=$id, user=$user, title=$title, dateCreated='$dateCreated', " +
+        return "Post(createdBy=$createdBy, title=$title, dateCreated='$dateCreated', " +
                 "text=$text, location=$location)"
     }
 
     @Exclude
     private fun toMap(): Map<String, Any> {
         val result = HashMap<String, Any>()
-        result.put("id", id!!)
-        result.put("user", user!!)
-        result.put("title", title!!)
-        result.put("dateCreated", dateCreated!!)
-        result.put("text", text!!)
-        result.put("location", location!!)
+        result.put("createdBy", createdBy)
+        result.put("title", title)
+        result.put("dateCreated", dateCreated)
+        result.put("text", text)
+        result.put("location", location)
         return result
     }
 

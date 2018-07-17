@@ -4,21 +4,22 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.db.SupportSQLiteOpenHelper
 import android.arch.persistence.room.*
 import android.content.Context
+import r.stookey.hikr.db.dao.PostDAO
+import r.stookey.hikr.db.dao.UserDAO
 import r.stookey.hikr.db.entity.PostEntity
 import r.stookey.hikr.db.entity.UserEntity
 
 
 @Database(entities = arrayOf(PostEntity::class, UserEntity::class), version = 1)
-class HikrDatabase: RoomDatabase() {
+abstract class HikrDatabase: RoomDatabase() {
 
 
     /*
     Singleton Pattern for Database Initialization
 */
     companion object {
-        private var INSTANCE: HikrDatabase? = null
-
-        fun getInstance(context: Context): HikrDatabase?{
+        private lateinit var INSTANCE: HikrDatabase
+        fun getInstance(context: Context): HikrDatabase {
             if(INSTANCE == null){
                 synchronized(HikrDatabase::class){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
@@ -29,6 +30,10 @@ class HikrDatabase: RoomDatabase() {
             return INSTANCE
         }
     }
+
+    abstract fun getUserDao(): UserDAO
+
+    abstract fun getPostDao(): PostDAO
 
     /**
      * Deletes all rows from all the tables that are registered to this database as

@@ -8,16 +8,17 @@ import r.stookey.hikr.R
 
 
 import r.stookey.hikr.ui.fragments.MessageListFragment.OnListFragmentInteractionListener
-import r.stookey.hikr.dummy.DummyContent.DummyItem
+import r.stookey.hikr.model.Post
 
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
+ * [RecyclerView.Adapter] that can display an Item and makes a call to the
  * specified [OnListFragmentInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
 
 class MyMessageListRecyclerViewAdapter(
-        private val mValues: List<DummyItem>,
+        private val mValues: List<Post>,
+        //private val mValues: List<DummyItem>,
         private val mListener: OnListFragmentInteractionListener?)
     : RecyclerView.Adapter<MyMessageListRecyclerViewAdapter.ViewHolder>() {
 
@@ -25,7 +26,7 @@ class MyMessageListRecyclerViewAdapter(
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
+            val item = v.tag as Post
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
             mListener?.onListFragmentInteraction(item)

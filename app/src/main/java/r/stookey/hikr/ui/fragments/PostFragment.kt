@@ -13,22 +13,27 @@ import r.stookey.hikr.viewmodel.PostViewModel
 import r.stookey.hikr.viewmodel.UserViewModel
 import r.stookey.hikr.R
 
-class PostFragment(): Fragment(), View.OnClickListener {
+class PostFragment: Fragment(), View.OnClickListener {
 
     private val TAG = "POSTFRAGMENT"
 
     private lateinit var messageString: String
     private lateinit var titleString: String
+    private lateinit var mUserID: Any
+    private lateinit var mLocation: Any
 
 
     private var userViewModel: UserViewModel = UserViewModel()
     private var postViewModel: PostViewModel = PostViewModel()
 
-
-
     companion object {
-
-        fun newInstance(): PostFragment = PostFragment()
+        fun newInstance(userID: String): PostFragment{
+            val postFragment = PostFragment()
+            val args = Bundle()
+            args.putString("userID", userID)
+            postFragment.arguments = args
+            return postFragment
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -49,14 +54,13 @@ class PostFragment(): Fragment(), View.OnClickListener {
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
-    //Todo Minimize the typed message or pin message to map
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId){
             R.id.pin -> {
 
             }
             R.id.menu_map -> {
-
+                //TODO Show and hide the PostFragment to display the MapView with messages
             }
         }
         return super.onOptionsItemSelected(item)
@@ -64,10 +68,31 @@ class PostFragment(): Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Inject ID and Location into Post View Models
         userViewModel = ViewModelProviders.of(activity!!).get(userViewModel::class.java)
         postViewModel = ViewModelProviders.of(activity!!).get(postViewModel::class.java)
+
+        if(arguments!=null){
+            if(arguments!!.containsKey("userID") && arguments!!.containsKey("location")){
+                mUserID = arguments!!["userID"]
+                mLocation = arguments!!["location"]
+            }
+        }
+
+
     }
 
+    /**
+     * Called when the Fragment is no longer resumed.  This is generally
+     * tied to [Activity.onPause] of the containing
+     * Activity's lifecycle.
+     */
+    //TODO Bundle Title and Post Text into savedInstanceState
+    override fun onPause() {
+        super.onPause()
+
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -100,7 +125,7 @@ class PostFragment(): Fragment(), View.OnClickListener {
     private fun textChanged(){
         messageString = etText.text.toString()
         titleString = etTitle.text.toString()
-        postViewModel.updateText(messageString)
+        postViewModel.addPostTextToModelView(messageString, titleString)
     }
 
 

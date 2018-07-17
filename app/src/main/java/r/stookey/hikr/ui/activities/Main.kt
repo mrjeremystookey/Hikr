@@ -31,10 +31,12 @@ import kotlinx.android.synthetic.main.main_page.*
 import r.stookey.hikr.viewmodel.PostViewModel
 import r.stookey.hikr.viewmodel.UserViewModel
 import r.stookey.hikr.R
-import r.stookey.hikr.dummy.DummyContent
+import r.stookey.hikr.Repo
+import r.stookey.hikr.model.Post
 import r.stookey.hikr.ui.fragments.MessageListFragment
 import r.stookey.hikr.ui.fragments.PostFragment
 import r.stookey.hikr.ui.fragments.ProfileFragment
+import javax.inject.Inject
 
 class Main: AppCompatActivity(),
         BottomNavigationView.OnNavigationItemSelectedListener,
@@ -43,17 +45,26 @@ class Main: AppCompatActivity(),
         GoogleApiClient.OnConnectionFailedListener {
 
     private val TAG: String = "POST"
+
     private val LOCATION_REQUEST_CODE: Int = 10
     private val permissions = arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
 
 
+    @Inject lateinit var repo: Repo
+
+
+
+    //TODO Use ViewModelFactoryClass to create ViewModels with arguments
     private val userViewModel by lazy {
         ViewModelProviders.of(this).get(UserViewModel::class.java)
     }
 
+
     private val postViewModel by lazy {
         ViewModelProviders.of(this).get(PostViewModel::class.java)
     }
+
+    private lateinit var mUserID: String
 
 
 
@@ -68,8 +79,7 @@ class Main: AppCompatActivity(),
     lateinit var mapFragment: SupportMapFragment
     lateinit var googleMap: GoogleMap
 
-    val postFragment: PostFragment = PostFragment()
-
+    private var postFragment:PostFragment = PostFragment()
 
     private var content: ConstraintLayout? = null
 
@@ -83,27 +93,19 @@ class Main: AppCompatActivity(),
             requestPermissions()
         }
 
-
-        mGoogleApiClient = GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build()
-
-        mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync {
-            googleMap = it
-        }
-
+        initializeLocation()
 
 
         userViewModel.setUserID(intent.getStringExtra("userID"))
         postViewModel.setUserID(intent.getStringExtra("userID"))
+        mUserID = userViewModel.getUserID()
+
 
         bottomNavigationView.menu.findItem(R.id.action_user_profile).title = intent.getStringExtra("username")
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
         content = findViewById(R.id.content)
+
+        postFragment = PostFragment.newInstance(mUserID)
         addFragment(postFragment)
     }
 
@@ -116,6 +118,19 @@ class Main: AppCompatActivity(),
 
     }
 
+    private fun initializeLocation(){
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build()
+        mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync {
+            googleMap = it
+        }
+    }
+
     override fun onStop() {
         super.onStop()
         if (mGoogleApiClient!!.isConnected()) {
@@ -126,16 +141,15 @@ class Main: AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_all_posts -> {
-                val allPostsFragment = MessageListFragment.newInstance()
+                val allPostsFragment = MessageListFragment.newInstance(mUserID)
                 addFragment(allPostsFragment)
             }
             R.id.action_user_profile -> {
-                val profileFragment = ProfileFragment.newInstance()
+                val profileFragment = ProfileFragment.newInstance(mUserID)
                 mapFragment
                 addFragment(profileFragment)
             }
             R.id.action_new_post -> {
-                val postFragment = PostFragment.newInstance()
                 addFragment(postFragment)
             }
         }
@@ -169,8 +183,9 @@ class Main: AppCompatActivity(),
     @SuppressLint("MissingPermission")
     override fun onConnected(p0: Bundle?) {
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
-        //Setting Location for the View Model
-        userViewModel.setLocation(mLocation.toString())
+        //Setting Location for the View Models
+        userViewModel.setLocation(mLocation!!)
+        postViewModel.setLocation(mLocation!!)
         googleMap.addMarker(MarkerOptions().position(LatLng(mLocation!!.latitude, mLocation!!.longitude)).title("Current Location"))
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(mLocation!!.latitude, mLocation!!.longitude), 15f))
     }
@@ -213,8 +228,8 @@ class Main: AppCompatActivity(),
         }
     }
 
-    override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
+
+    override fun onListFragmentInteraction(item: Post?) {
+
     }
-
-
 }

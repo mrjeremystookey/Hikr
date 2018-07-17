@@ -22,19 +22,16 @@ class ProfileFragment: Fragment(), View.OnClickListener {
     private val TAG = "ProfileFragment"
 
     private lateinit var userID: String
-    private lateinit var email: String
+    private lateinit var userViewModel: UserViewModel
 
     companion object {
-
-        fun newInstance(): ProfileFragment = ProfileFragment()
-
-//        fun newInstance(userID: String, email: String) =
-//                ProfileFragment().apply{
-//                    arguments = Bundle().apply{
-//                        putString("userID", userID)
-//                        putString("email", email)
-//                    }
-//                }
+            fun newInstance(userID: String): ProfileFragment{
+                var profileFragment = ProfileFragment()
+                var args = Bundle()
+                args.putString("userID", userID)
+                profileFragment.arguments = args
+            return profileFragment
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,17 +48,13 @@ class ProfileFragment: Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         arguments?.let{
             userID = it.getString("userID")
-            email = it.getString("email")
         }
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
-        val userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
 
-        Log.d(TAG, userID + " " + email)
-        tvUsername?.text = email
 
 
 
