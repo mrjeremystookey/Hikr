@@ -16,22 +16,16 @@ import javax.inject.Singleton
 
 /*Used for injecting the Database instance and DAOS into the Repo class*/
 @Module
-class StorageModule(){
+class StorageModule(app: Application){
 
-    private lateinit var roomDatabase: HikrDatabase
+    private var roomDatabase: HikrDatabase
     private lateinit var firestoreDB: FirebaseFirestore
     private lateinit var userDAO: UserDAO
     private lateinit var postDAO: PostDAO
 
 
-
-    //Creates the Room Database Instance Singleton
-    fun storageModule(app: Application): StorageModule{
-/*
+    init {
         roomDatabase = HikrDatabase.getInstance(app.applicationContext)
-*/
-        roomDatabase = Room.databaseBuilder(app.applicationContext, HikrDatabase::class.java, "hikr_db").build()
-        return StorageModule()
     }
 
 
@@ -40,8 +34,6 @@ class StorageModule(){
     fun providesDatabase(): HikrDatabase{
         return roomDatabase
     }
-
-
 
     @Singleton
     @Provides
@@ -68,7 +60,7 @@ class StorageModule(){
     @Singleton
     @Provides
     fun providesRepo(): Repo {
-        return Repo()
+        return Repo(userDAO, postDAO, firestoreDB)
     }
 
     @Singleton

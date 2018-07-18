@@ -12,16 +12,11 @@ import r.stookey.hikr.di.modules.StorageModule
 import r.stookey.hikr.model.Post
 import javax.inject.Inject
 
-class UserViewModel: ViewModel(){
+class UserViewModel(@Inject val repo: Repo, @Inject val firebaseAuth: FirebaseAuth): ViewModel(){
 
 
     private lateinit var userID: String
     private lateinit var mLocation: Location
-
-    lateinit var repo: Repo
-    var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-
-    val hikrComponent = DaggerHikrComponent.builder().storageModule(StorageModule()).build()
 
 
 
@@ -41,7 +36,6 @@ class UserViewModel: ViewModel(){
         //TODO Get All Posts by User ID for displaying in the List Fragment
         /*Called when the All Posts fragment is opened or when a now post is added to the DB*/
         fun getAllPostsByUserID(): LiveData<List<Post>>{
-            repo = hikrComponent.repo
             return repo.getAllPostsByUserID(userID)
         }
 

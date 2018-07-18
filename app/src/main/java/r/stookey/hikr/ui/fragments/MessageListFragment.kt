@@ -95,7 +95,6 @@ class MessageListFragment : Fragment() {
         userViewModel.getAllPostsByUserID().observe(this, listAdapterObserver)
 
 
-        // Set the adapter
 
         return view
     }

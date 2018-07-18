@@ -1,10 +1,8 @@
 package r.stookey.hikr.viewmodel
 
 import android.annotation.TargetApi
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import android.location.Location
-import android.view.View
 import r.stookey.hikr.Repo
 import r.stookey.hikr.model.Post
 import java.time.LocalDateTime
@@ -13,10 +11,8 @@ import javax.inject.Inject
 
 
 //class PostViewModel(@Inject val uid: String, @Inject val repo: Repo): ViewModel(){
-class PostViewModel: ViewModel(){
+class PostViewModel(@Inject var repo: Repo): ViewModel(){
 
-    //Class to manage data
-    @Inject lateinit var repo: Repo
 
     //Post and User Information
     private lateinit var mUserID: String
@@ -28,7 +24,7 @@ class PostViewModel: ViewModel(){
     private lateinit var mLocation: Location
 
 
-    //public functions
+    //Public functions
     /*Called in Main Activity*/
     fun setUserID(uid: String){
         mUserID = uid
@@ -52,20 +48,20 @@ class PostViewModel: ViewModel(){
     //TODO Will be called when the createdBy clicks pin message
     /*Creates the Post object to be sent to the Repo class for further processing*/
     private fun createPostForRepo(){
-        var mPost = Post(null ,mUserID, mTitleString, getDate(), mPostText, getLocationOfPost())
+        var mPost = Post(null ,mUserID, mTitleString, getDateOfPostCreation(), mPostText, getLocationOfPost())
         repo.addPostFromViewModel(mPost)
     }
 
 
+
+
+    //Utility Functions
     private fun getLocationOfPost(): String{
-        var lat = mLocation.latitude
-        var lng = mLocation.longitude
-        locationLatLngFormatted = " '" + lat.toString() + ", " + lng.toString()+"' "
-        return locationLatLngFormatted
+        return  " '" + mLocation.latitude.toString() + ", " + mLocation.longitude.toString()+"' "
     }
 
     @TargetApi(26)
-    private fun getDate(): String{
+    private fun getDateOfPostCreation(): String{
         val dateTime = LocalDateTime.now().toString()
         return dateTime
     }

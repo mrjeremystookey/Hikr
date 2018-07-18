@@ -6,25 +6,19 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import r.stookey.hikr.db.dao.PostDAO
 import r.stookey.hikr.db.dao.UserDAO
-import r.stookey.hikr.db.entity.PostEntity
-import r.stookey.hikr.di.DaggerHikrComponent
-import r.stookey.hikr.di.modules.StorageModule
 import r.stookey.hikr.model.Post
 import javax.inject.Inject
 
-class Repo() {
+class Repo(@Inject var userDAO: UserDAO,
+           @Inject var postDAO: PostDAO,
+           @Inject var firestoreDB: FirebaseFirestore) {
 
     private val TAG = "REPO"
-
 
     private lateinit var mListLiveData: LiveData<List<Post>>
     private lateinit var mList: List<Post>
     private lateinit var mUID: String
     private lateinit var mPost: Post
-
-    @Inject lateinit var userDAO: UserDAO
-    @Inject lateinit var postDAO: PostDAO
-    @Inject lateinit var firestoreDB: FirebaseFirestore
 
 
     /*Public funtion to grab List of Post objects from either local cache, Room or network storage, Firebase*/
