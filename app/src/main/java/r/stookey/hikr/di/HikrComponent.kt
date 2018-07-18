@@ -1,6 +1,7 @@
 package r.stookey.hikr.di
 
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Component
 import r.stookey.hikr.Repo
@@ -21,5 +22,5 @@ interface HikrComponent{
     var roomDatabase: HikrDatabase
     var firestoreDatabase: FirebaseFirestore
     var repo: Repo
-
+    var firebaseAuth: FirebaseAuth
 }

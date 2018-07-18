@@ -7,6 +7,8 @@ import android.location.Location
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import r.stookey.hikr.Repo
+import r.stookey.hikr.di.DaggerHikrComponent
+import r.stookey.hikr.di.modules.StorageModule
 import r.stookey.hikr.model.Post
 import javax.inject.Inject
 
@@ -16,11 +18,14 @@ class UserViewModel: ViewModel(){
     private lateinit var userID: String
     private lateinit var mLocation: Location
 
-    @Inject lateinit var repo: Repo
-    @Inject lateinit var firebaseAuth: FirebaseAuth
+    lateinit var repo: Repo
+    var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    val hikrComponent = DaggerHikrComponent.builder().storageModule(StorageModule()).build()
 
 
-        //Best Way to pass parameters to a View Model?
+
+    //Best Way to pass parameters to a View Model?
         fun setUserID(uid: String){
             userID = uid
         }
@@ -36,6 +41,7 @@ class UserViewModel: ViewModel(){
         //TODO Get All Posts by User ID for displaying in the List Fragment
         /*Called when the All Posts fragment is opened or when a now post is added to the DB*/
         fun getAllPostsByUserID(): LiveData<List<Post>>{
+            repo = hikrComponent.repo
             return repo.getAllPostsByUserID(userID)
         }
 
@@ -44,7 +50,7 @@ class UserViewModel: ViewModel(){
         //Should probably be moved out of this class.
         fun login(email: String, password:String): MutableLiveData<FirebaseUser>{
             //Attempt Login Here instead of Login Class
-            var firebaseUserMutable: MutableLiveData<FirebaseUser> = MutableLiveData()
+            val firebaseUserMutable: MutableLiveData<FirebaseUser> = MutableLiveData()
             //Attempt Login Here instead of Login Class
             //Return boolean and startActivity on next page
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {

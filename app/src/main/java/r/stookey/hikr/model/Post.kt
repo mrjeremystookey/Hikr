@@ -20,10 +20,6 @@ class Post {
     lateinit var location: String
     lateinit var id: String
 
-    private val filename = "temp_post"
-
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
     constructor()
 
     constructor(id: String?, createdBy: String, title: String, dateCreated: String, text: String, location: String){
@@ -53,41 +49,11 @@ class Post {
 
 
 
-    fun uploadPost(){
-        val messages = toMap()
-        db.collection("Messages")
-                .document(title!!)
-                .set(messages)
-                .addOnSuccessListener {
-                    Log.d(TAG, "uploadMessage(): message upload successful")
-                }
-                .addOnFailureListener {
-                    Log.d(TAG, "uploadMessage(): message upload failure")
-                }
-    }
-
-    fun cachePost(){
-        //TODO Save messages to RoomDatabase as they are typed
-        val tempPost = createTempFile(filename,null, null)
-
-    }
-
-    fun deletePost(){
-
-    }
-
-    fun editPost(){
-
-    }
 
 
-    fun pinPost(){
 
-    }
 
-    private fun getLocation(){
 
-    }
 
 
 

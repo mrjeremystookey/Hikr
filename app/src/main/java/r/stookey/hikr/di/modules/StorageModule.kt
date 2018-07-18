@@ -3,6 +3,7 @@ package r.stookey.hikr.di.modules
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 
 /*Used for injecting the Database instance and DAOS into the Repo class*/
 @Module
-class StorageModule{
+class StorageModule(){
 
     private lateinit var roomDatabase: HikrDatabase
     private lateinit var firestoreDB: FirebaseFirestore
@@ -23,9 +24,14 @@ class StorageModule{
     private lateinit var postDAO: PostDAO
 
 
+
     //Creates the Room Database Instance Singleton
-    fun StorageModule(app: Application){
+    fun storageModule(app: Application): StorageModule{
+/*
         roomDatabase = HikrDatabase.getInstance(app.applicationContext)
+*/
+        roomDatabase = Room.databaseBuilder(app.applicationContext, HikrDatabase::class.java, "hikr_db").build()
+        return StorageModule()
     }
 
 
@@ -63,5 +69,11 @@ class StorageModule{
     @Provides
     fun providesRepo(): Repo {
         return Repo()
+    }
+
+    @Singleton
+    @Provides
+    fun providesFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
     }
 }

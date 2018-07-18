@@ -12,15 +12,16 @@ import javax.inject.Inject
 
 
 
-/*class PostViewModel(@Inject uid: String, @Inject repo: Repo): ViewModel(){*/
+//class PostViewModel(@Inject val uid: String, @Inject val repo: Repo): ViewModel(){
 class PostViewModel: ViewModel(){
 
+    //Class to manage data
+    @Inject lateinit var repo: Repo
 
+    //Post and User Information
     private lateinit var mUserID: String
     private lateinit var mPostText: String
     private lateinit var mTitleString: String
-
-    @Inject lateinit var repo: Repo
 
 
     lateinit var locationLatLngFormatted: String
@@ -38,7 +39,6 @@ class PostViewModel: ViewModel(){
         mLocation = location
     }
 
-
     /*Called when text in the Title or Post Body is changed*/
     fun addPostTextToModelView(text: String, title: String){
         mPostText = text
@@ -50,10 +50,12 @@ class PostViewModel: ViewModel(){
 
     //Internal functions
     //TODO Will be called when the createdBy clicks pin message
+    /*Creates the Post object to be sent to the Repo class for further processing*/
     private fun createPostForRepo(){
         var mPost = Post(null ,mUserID, mTitleString, getDate(), mPostText, getLocationOfPost())
         repo.addPostFromViewModel(mPost)
     }
+
 
     private fun getLocationOfPost(): String{
         var lat = mLocation.latitude

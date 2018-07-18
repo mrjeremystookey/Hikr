@@ -13,12 +13,8 @@ import r.stookey.hikr.db.entity.PostEntity
 interface PostDAO{
 
 
-    @Insert
-    fun addsUserPosts(allPosts: List<Post>){
-    }
-
     @Insert()
-    fun addPostToRoom(postEntity: PostEntity)
+    fun addPostToRoom(post: Post)
 
 
 

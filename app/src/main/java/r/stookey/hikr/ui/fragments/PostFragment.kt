@@ -23,9 +23,15 @@ class PostFragment: Fragment(), View.OnClickListener {
     private lateinit var mLocation: Any
 
 
-    private var userViewModel: UserViewModel = UserViewModel()
-    private var postViewModel: PostViewModel = PostViewModel()
+    private val userViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(UserViewModel::class.java)
+    }
+    private val postViewModel by lazy {
+        ViewModelProviders.of(activity!!).get(PostViewModel::class.java)
+    }
 
+
+    //Creates PostFragment object with Location and UID arguments
     companion object {
         fun newInstance(userID: String): PostFragment{
             val postFragment = PostFragment()
@@ -69,30 +75,14 @@ class PostFragment: Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Inject ID and Location into Post View Models
-        userViewModel = ViewModelProviders.of(activity!!).get(userViewModel::class.java)
-        postViewModel = ViewModelProviders.of(activity!!).get(postViewModel::class.java)
-
         if(arguments!=null){
-            if(arguments!!.containsKey("userID") && arguments!!.containsKey("location")){
+            if(arguments!!.containsKey("userID")){
                 mUserID = arguments!!["userID"]
-                mLocation = arguments!!["location"]
             }
         }
 
-
     }
 
-    /**
-     * Called when the Fragment is no longer resumed.  This is generally
-     * tied to [Activity.onPause] of the containing
-     * Activity's lifecycle.
-     */
-    //TODO Bundle Title and Post Text into savedInstanceState
-    override fun onPause() {
-        super.onPause()
-
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

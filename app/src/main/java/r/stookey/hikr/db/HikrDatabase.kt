@@ -19,10 +19,11 @@ abstract class HikrDatabase: RoomDatabase() {
 */
     companion object {
         private lateinit var INSTANCE: HikrDatabase
+
         fun getInstance(context: Context): HikrDatabase {
             if(INSTANCE == null){
                 synchronized(HikrDatabase::class){
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                    INSTANCE = Room.databaseBuilder(context.applicationContext,
                             HikrDatabase::class.java, "hikr.db")
                             .build()
                 }

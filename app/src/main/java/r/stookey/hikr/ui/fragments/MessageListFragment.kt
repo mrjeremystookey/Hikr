@@ -16,6 +16,8 @@ import r.stookey.hikr.viewmodel.PostViewModel
 import r.stookey.hikr.viewmodel.UserViewModel
 import r.stookey.hikr.R
 import r.stookey.hikr.Repo
+import r.stookey.hikr.di.DaggerHikrComponent
+import r.stookey.hikr.di.modules.StorageModule
 
 import r.stookey.hikr.model.Post
 import r.stookey.hikr.ui.adapters.MyMessageListRecyclerViewAdapter
@@ -62,6 +64,10 @@ class MessageListFragment : Fragment() {
                 mUserID = arguments!!["userID"]
             }
         }
+
+        DaggerHikrComponent.builder()
+                .storageModule(StorageModule().storageModule(activity!!.application))
+                .build()
 
 
 
