@@ -15,7 +15,10 @@ import android.support.v4.app.Fragment
 
 
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -44,7 +47,8 @@ class Main : AppCompatActivity(),
         BottomNavigationView.OnNavigationItemSelectedListener,
         MessageListFragment.OnListFragmentInteractionListener,
         LocationListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        Toolbar.OnMenuItemClickListener {
 
     private val TAG: String = "POST"
 
@@ -84,18 +88,18 @@ class Main : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page)
+        setSupportActionBar(findViewById(R.id.appbar))
         Log.d(TAG, "Main activity started")
         //TODO Show App Bar Action Icons on first load
-        setSupportActionBar(findViewById(R.id.appbar))
         if (!checkPermissions()) {
             requestPermissions()
         }
         getUserProperties()
         initializeLocation()
-        bottomNavigationView.menu.findItem(R.id.action_user_profile).title = mUsername
-        bottomNavigationView.setOnNavigationItemSelectedListener(this)
-        content = findViewById(R.id.content)
+        setUpNavigationBar()
+        setUpActionBar()
 
+        content = findViewById(R.id.content)
         postFragment = PostFragment.newInstance()
         addFragment(postFragment)
     }
@@ -109,29 +113,27 @@ class Main : AppCompatActivity(),
 
     }
 
-    private fun getUserProperties(){
-        mUserID = intent.getStringExtra("userID")
-        mUsername = intent.getStringExtra("username")
-    }
-
-    private fun initializeLocation() {
-        mGoogleApiClient = GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build()
-        mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync {
-            googleMap = it
-        }
-    }
-
     override fun onStop() {
         super.onStop()
         if (mGoogleApiClient!!.isConnected()) {
             mGoogleApiClient!!.disconnect()
         }
+    }
+
+    /**
+     * This method will be invoked when a menu item is clicked if the item itself did
+     * not already handle the event.
+     *
+     * @param item [MenuItem] that was clicked
+     * @return `true` if the event was handled, `false` otherwise.
+     */
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        if(item!!.itemId == R.id.pin){
+            //TODO Pin Current Fragment Message to the Map at Known Location
+        } else{
+            //TODO Show Map View of the area and populate with Messages
+        }
+        return true
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -150,6 +152,35 @@ class Main : AppCompatActivity(),
             }
         }
         return false
+    }
+
+    private fun setUpNavigationBar(){
+        bottomNavigationView.menu.findItem(R.id.action_user_profile).title = mUsername
+        bottomNavigationView.setOnNavigationItemSelectedListener(this)
+    }
+
+    private fun setUpActionBar(){
+        toolbar.title = "Create Post"
+        toolbar.inflateMenu(R.menu.post_app_bar)
+        toolbar.setOnMenuItemClickListener(this)
+    }
+
+    private fun getUserProperties(){
+        mUserID = intent.getStringExtra("userID")
+        mUsername = intent.getStringExtra("username")
+    }
+
+    private fun initializeLocation() {
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build()
+        mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync {
+            googleMap = it
+        }
     }
 
     private fun addFragment(fragment: Fragment) {
@@ -222,7 +253,6 @@ class Main : AppCompatActivity(),
             }
         }
     }
-
 
     override fun onListFragmentInteraction(item: Post?) {
 

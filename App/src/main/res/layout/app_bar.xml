@@ -9,7 +9,7 @@
     android:layout_height="?android:attr/actionBarSize"
     android:background="@color/colorPrimary"
     app:titleTextColor="@color/textColor"
-    tools:menu="menu"
+    tools:menu=""
     android:elevation="4dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar">

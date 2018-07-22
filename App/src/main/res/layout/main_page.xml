@@ -8,13 +8,18 @@
 
 
     <android.support.v7.widget.Toolbar
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:elevation="4dp"
         android:layout_height="?attr/actionBarSize"
+
+        app:titleTextColor="@color/textColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/map"
-        app:layout_constraintTop_toTopOf="parent"></android.support.v7.widget.Toolbar>
+        app:layout_constraintTop_toTopOf="parent">
+
+    </android.support.v7.widget.Toolbar>
 
 
     <fragment

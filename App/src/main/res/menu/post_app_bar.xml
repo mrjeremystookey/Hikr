@@ -7,6 +7,7 @@
     <item
         android:id="@+id/pin"
         android:icon="@drawable/pin_icon_appbar"
+        android:iconTint="@color/textColor"
         android:title="Pin"
         app:showAsAction="always"
         android:visible="true" />
@@ -16,6 +17,11 @@
         android:id="@+id/menu_map"
         android:icon="@drawable/map_icon_appbar"
         android:title="Map"
+        android:iconTint="@color/textColor"
         app:showAsAction="always"
         android:visible="true" />
+
+
+
+
 </menu>
