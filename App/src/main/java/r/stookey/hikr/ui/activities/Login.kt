@@ -1,7 +1,5 @@
 package r.stookey.hikr.ui.activities
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,25 +8,25 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.login_flow.*
-import r.stookey.hikr.viewmodel.UserViewModel
+import r.stookey.hikr.HikrApp
 import r.stookey.hikr.R
+import r.stookey.hikr.di.Injector
+import javax.inject.Inject
 
 
 class Login : AppCompatActivity(), View.OnClickListener {
 
     private val TAG: String = "LOGIN"
-
-
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var firebaseUser: FirebaseUser? = firebaseAuth.currentUser
-
+    private val firebaseAuth: FirebaseAuth
     private lateinit var loginIntent: Intent
+
+    init {
+        firebaseAuth = Injector.get().firebaseAuth
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_flow)
         bLogin.setOnClickListener(this)
@@ -40,7 +38,6 @@ class Login : AppCompatActivity(), View.OnClickListener {
         super.onStart()
         if (progressBar.visibility == VISIBLE)
             progressBar.visibility = INVISIBLE
-        firebaseUser = firebaseAuth.currentUser
     }
 
     override fun onClick(v: View?) {
@@ -54,7 +51,6 @@ class Login : AppCompatActivity(), View.OnClickListener {
     private fun login() {
         tvIncorrectEmailPassword.visibility = INVISIBLE
         progressBar.visibility = VISIBLE
-
         firebaseAuth.signInWithEmailAndPassword(etEmailLogin.text.toString(), etPasswordLogin.text.toString()).addOnCompleteListener {
             if (it.isSuccessful) {
                 loginIntent.putExtra("userID", firebaseAuth.currentUser!!.uid)

@@ -45,8 +45,9 @@ dependencies {
     implementation 'android.arch.lifecycle:viewmodel:1.1.1'
     implementation 'android.arch.lifecycle:livedata-core:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
+
     implementation "android.arch.persistence.room:runtime:$room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+    kapt "android.arch.persistence.room:compiler:$room_version"
 
     //Test
     testImplementation 'junit:junit:4.12'
@@ -69,10 +70,10 @@ dependencies {
     kapt "com.github.hotchemi:permissionsdispatcher-processor:3.3.1"
     kapt 'com.google.dagger:dagger-compiler:2.13'
 
-    apply plugin: 'com.google.gms.google-services'
+
 
 
 }
 
-
+apply plugin: 'com.google.gms.google-services'
 

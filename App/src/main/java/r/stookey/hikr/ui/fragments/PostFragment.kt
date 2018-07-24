@@ -36,16 +36,8 @@ class PostFragment: Fragment(), View.OnClickListener
     }
 
 
-
     //Creates PostFragment object with Location and UID arguments
     companion object {
-        /*fun newInstance(userID: String): PostFragment{
-            val postFragment = PostFragment()
-            val args = Bundle()
-            args.putString("userID", userID)
-            postFragment.arguments = args
-            return postFragment
-        }*/
         fun newInstance() = PostFragment()
     }
 
@@ -60,8 +52,6 @@ class PostFragment: Fragment(), View.OnClickListener
         //TODO Display Submenu for adding audio recording, video, and photos
     }
 
-
-    //TODO Show Menu App Bar
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.post_app_bar, menu)
         return super.onCreateOptionsMenu(menu, inflater)
@@ -78,14 +68,6 @@ class PostFragment: Fragment(), View.OnClickListener
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-
-    }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

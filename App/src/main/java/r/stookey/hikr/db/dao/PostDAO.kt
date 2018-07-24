@@ -14,7 +14,7 @@ interface PostDAO {
 
 
     @Insert()
-    fun addPostToRoom(post: Post)
+    fun addPostToRoom(post: PostEntity)
 
 
 }

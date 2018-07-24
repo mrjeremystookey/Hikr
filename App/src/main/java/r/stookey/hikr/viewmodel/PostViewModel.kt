@@ -4,14 +4,20 @@ import android.annotation.TargetApi
 import android.arch.lifecycle.ViewModel
 import android.location.Location
 import r.stookey.hikr.Repo
+import r.stookey.hikr.di.Injector
 import r.stookey.hikr.model.Post
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 
 //class PostViewModel(@Inject val uid: String, @Inject val repo: Repo): ViewModel(){
-class PostViewModel @Inject constructor(var repo: Repo, var userID: String) : ViewModel() {
+class PostViewModel(var userID: String) : ViewModel() {
 
+    private val mRepo: Repo
+
+    init {
+        mRepo = Injector.get().repo
+    }
 
     //Post and User Information
     private lateinit var mPostText: String
@@ -36,7 +42,7 @@ class PostViewModel @Inject constructor(var repo: Repo, var userID: String) : Vi
     /*Creates the Post object to be sent to the Repo class for further processing*/
     private fun createPostForRepo() {
         var mPost = Post(null, userID, mTitleString, getDateOfPostCreation(), mPostText, getLocationOfPost())
-        repo.addPostFromViewModel(mPost)
+        mRepo.addPostFromViewModel(mPost)
     }
 
 

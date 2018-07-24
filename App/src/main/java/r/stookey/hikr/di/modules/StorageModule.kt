@@ -3,6 +3,7 @@ package r.stookey.hikr.di.modules
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
+import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -16,19 +17,16 @@ import javax.inject.Singleton
 
 /*Used for injecting the Database instance and DAOS into the Repo class*/
 @Module
-class StorageModule(app: Application) {
+class StorageModule(context: Context) {
 
-    private var roomDatabase: HikrDatabase
-    private var firestoreDB: FirebaseFirestore
-    private lateinit var userDAO: UserDAO
-    private lateinit var postDAO: PostDAO
+    private var mContext = context
 
 
-    init {
-        roomDatabase = HikrDatabase.getInstance(app.applicationContext)
-        firestoreDB = FirebaseFirestore.getInstance()
+    @Singleton
+    @Provides
+    fun provideAppContext(): Context {
+        return mContext
     }
-
 
     @Singleton
     @Provides
@@ -40,23 +38,20 @@ class StorageModule(app: Application) {
     //Room DI
     @Singleton
     @Provides
-    fun providesDatabase(): HikrDatabase {
-        return roomDatabase
+    fun provideRoomDatabase(): HikrDatabase {
+        return Room.databaseBuilder(mContext, HikrDatabase::class.java, "hikr_db").build()
     }
-
 
     @Singleton
     @Provides
     fun providesPostDao(db: HikrDatabase): PostDAO {
-        postDAO = db.getPostDao()
-        return postDAO
+        return db.getPostDao()
     }
 
     @Singleton
     @Provides
     fun providesUserDao(db: HikrDatabase): UserDAO {
-        userDAO = db.getUserDao()
-        return userDAO
+        return db.getUserDao()
     }
 
 
@@ -64,7 +59,8 @@ class StorageModule(app: Application) {
     @Singleton
     @Provides
     fun providesFireStore(): FirebaseFirestore {
-        return firestoreDB
+        return FirebaseFirestore.getInstance()
+
     }
 
     @Singleton

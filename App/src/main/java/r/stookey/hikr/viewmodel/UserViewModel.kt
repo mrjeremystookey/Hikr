@@ -7,11 +7,16 @@ import android.location.Location
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import r.stookey.hikr.Repo
+import r.stookey.hikr.di.Injector
 import r.stookey.hikr.model.Post
 import javax.inject.Inject
 
-class UserViewModel @Inject constructor(var repo: Repo, var userID: String) : ViewModel() {
+class UserViewModel constructor(var userID: String) : ViewModel() {
 
+    val repo: Repo
+    init {
+        repo = Injector.get().repo
+    }
 
     private lateinit var mLocation: Location
 
@@ -25,6 +30,10 @@ class UserViewModel @Inject constructor(var repo: Repo, var userID: String) : Vi
     fun getAllPostsByUserID(): LiveData<List<Post>> {
         return repo.getAllPostsByUserID(userID)
     }
+
+
+
+
 
 
 }

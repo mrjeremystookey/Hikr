@@ -10,16 +10,14 @@ import r.stookey.hikr.db.entity.PostEntity
 import r.stookey.hikr.db.entity.UserEntity
 
 
-@Database(entities = arrayOf(PostEntity::class, UserEntity::class), version = 1)
+@Database(entities = [PostEntity::class, UserEntity::class], version = 1)
 abstract class HikrDatabase : RoomDatabase() {
-
 
     /*
     Singleton Pattern for Database Initialization
-*/
+*//*
     companion object {
         private lateinit var INSTANCE: HikrDatabase
-
         fun getInstance(context: Context): HikrDatabase {
             if (INSTANCE == null) {
                 synchronized(HikrDatabase::class) {
@@ -30,7 +28,7 @@ abstract class HikrDatabase : RoomDatabase() {
             }
             return INSTANCE
         }
-    }
+    }*/
 
     abstract fun getUserDao(): UserDAO
 

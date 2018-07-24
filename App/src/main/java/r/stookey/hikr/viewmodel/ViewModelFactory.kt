@@ -18,9 +18,9 @@ class ViewModelFactory(val userID: String?) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PostViewModel::class.java)) {
-            return PostViewModel(repo, userID!!) as T
+            return PostViewModel(userID!!) as T
         } else {
-            return UserViewModel(repo, userID!!) as T
+            return UserViewModel(userID!!) as T
         }
     }
 }

@@ -35,6 +35,7 @@ import r.stookey.hikr.viewmodel.PostViewModel
 import r.stookey.hikr.viewmodel.UserViewModel
 import r.stookey.hikr.R
 import r.stookey.hikr.Repo
+import r.stookey.hikr.di.Injector
 import r.stookey.hikr.model.Post
 import r.stookey.hikr.ui.fragments.MessageListFragment
 import r.stookey.hikr.ui.fragments.PostFragment
@@ -54,12 +55,13 @@ class Main : AppCompatActivity(),
 
     private val LOCATION_REQUEST_CODE: Int = 10
     private val permissions = arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
+    private val mLocationManager: LocationManager
 
+    init {
+        mLocationManager = Injector.get().locationManager
+    }
 
-
-
-
-    //TODO Use ViewModelFactoryClass to create ViewModels with arguments
+    //First Created ViewModels
     private val userViewModel by lazy {
         ViewModelProviders.of(this, ViewModelFactory(intent.getStringExtra("userID"))).get(UserViewModel::class.java)
     }
@@ -71,10 +73,14 @@ class Main : AppCompatActivity(),
     private lateinit var mUsername: String
 
 
+
+
+
     //Location declarations
     private var mGoogleApiClient: GoogleApiClient? = null
     private var mLocation: Location? = null
-    private var mLocationManager: LocationManager? = null
+
+
     private var mLocationRequest: LocationRequest? = null
     private val UPDATE_INTERVAL = (2 * 1000).toLong()  /* 10 secs */
     private val FASTEST_INTERVAL: Long = 2000 /* 2 sec */
@@ -90,10 +96,11 @@ class Main : AppCompatActivity(),
         setContentView(R.layout.main_page)
         setSupportActionBar(findViewById(R.id.appbar))
         Log.d(TAG, "Main activity started")
-        //TODO Show App Bar Action Icons on first load
+
         if (!checkPermissions()) {
             requestPermissions()
         }
+
         getUserProperties()
         initializeLocation()
         setUpNavigationBar()
@@ -109,8 +116,6 @@ class Main : AppCompatActivity(),
         if (mGoogleApiClient != null) {
             mGoogleApiClient!!.connect()
         }
-
-
     }
 
     override fun onStop() {
@@ -120,13 +125,6 @@ class Main : AppCompatActivity(),
         }
     }
 
-    /**
-     * This method will be invoked when a menu item is clicked if the item itself did
-     * not already handle the event.
-     *
-     * @param item [MenuItem] that was clicked
-     * @return `true` if the event was handled, `false` otherwise.
-     */
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         if(item!!.itemId == R.id.pin){
             //TODO Pin Current Fragment Message to the Map at Known Location
@@ -139,7 +137,7 @@ class Main : AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_all_posts -> {
-                val allPostsFragment = MessageListFragment.newInstance(mUserID)
+                val allPostsFragment = MessageListFragment.newInstance()
                 addFragment(allPostsFragment)
             }
             R.id.action_user_profile -> {
@@ -176,7 +174,8 @@ class Main : AppCompatActivity(),
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build()
-        mLocationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync {
             googleMap = it

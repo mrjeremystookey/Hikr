@@ -1,7 +1,6 @@
 package r.stookey.hikr.ui.fragments
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 
@@ -13,19 +12,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.app_bar.*
-import r.stookey.hikr.viewmodel.PostViewModel
 import r.stookey.hikr.viewmodel.UserViewModel
 import r.stookey.hikr.R
-import r.stookey.hikr.Repo
 import r.stookey.hikr.di.DaggerHikrComponent
-import r.stookey.hikr.di.modules.AppModule
 import r.stookey.hikr.di.modules.StorageModule
 
 import r.stookey.hikr.model.Post
 import r.stookey.hikr.ui.adapters.MyMessageListRecyclerViewAdapter
-import r.stookey.hikr.viewmodel.ViewModelFactory
-import javax.inject.Inject
 
 /**
  * A fragment representing a list of Items.
@@ -38,10 +31,6 @@ class MessageListFragment : Fragment() {
     private var listener: OnListFragmentInteractionListener? = null
 
     //May not be needed since the PostViewModel already has the UserID
-    private lateinit var mUserID: Any
-
-
-
 
 
 
@@ -51,30 +40,7 @@ class MessageListFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(userID: String): MessageListFragment {
-            val messageListFragment = MessageListFragment()
-            var args = Bundle()
-            args.putString("createdBy", userID)
-            messageListFragment.arguments = args
-            return messageListFragment
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            if (arguments!!.containsKey("userID")) {
-                mUserID = arguments!!["userID"]
-            }
-        }
-
-        /*var hikrComponent = DaggerHikrComponent.builder()
-                .appModule(AppModule(activity!!.application))
-                .storageModule(StorageModule(activity!!.application))
-                .build()
-                .inject(activity!!.application)*/
-
-
+        fun newInstance() = MessageListFragment()
     }
 
 
