@@ -9,10 +9,8 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.login_flow.*
-import r.stookey.hikr.HikrApp
 import r.stookey.hikr.R
 import r.stookey.hikr.di.Injector
-import javax.inject.Inject
 
 
 class Login : AppCompatActivity(), View.OnClickListener {

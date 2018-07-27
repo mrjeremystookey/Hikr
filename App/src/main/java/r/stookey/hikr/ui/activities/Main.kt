@@ -128,6 +128,7 @@ class Main : AppCompatActivity(),
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         if(item!!.itemId == R.id.pin){
             //TODO Pin Current Fragment Message to the Map at Known Location
+
         } else{
             //TODO Show Map View of the area and populate with Messages
         }

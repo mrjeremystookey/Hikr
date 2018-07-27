@@ -7,11 +7,11 @@ import r.stookey.hikr.model.Post
 
 
 @Entity(tableName = "createdBy")
-data class UserEntity(@PrimaryKey
-                      var userID: String?,
+data class UserEntity(
+        @PrimaryKey var userID: String,
                       var username: String?,
                       @ColumnInfo(name = "all_posts")
-                      var allPosts: List<Post>?)
+                      var allPosts: String)
 
 
 

@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.widget.Toolbar
 import kotlinx.android.synthetic.main.new_post_fragment.*
 import r.stookey.hikr.viewmodel.PostViewModel
 import r.stookey.hikr.viewmodel.UserViewModel
@@ -41,6 +42,29 @@ class PostFragment: Fragment(), View.OnClickListener
         fun newInstance() = PostFragment()
     }
 
+    /**
+     * Called to do initial creation of a fragment.  This is called after
+     * [.onAttach] and before
+     * [.onCreateView].
+     *
+     *
+     * Note that this can be called while the fragment's activity is
+     * still in the process of being created.  As such, you can not rely
+     * on things like the activity's content view hierarchy being initialized
+     * at this point.  If you want to do work once the activity itself is
+     * created, see [.onActivityCreated].
+     *
+     *
+     * Any restored child fragments will be created before the base
+     * `Fragment.onCreate` method returns.
+     *
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.new_post_fragment, container, false)
         val fabAddPost: FloatingActionButton = view.findViewById(R.id.fabAddPost)
@@ -60,7 +84,7 @@ class PostFragment: Fragment(), View.OnClickListener
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId){
             R.id.pin -> {
-
+                postViewModel.addPost()
             }
             R.id.menu_map -> {
                 //TODO Show and hide the PostFragment to display the MapView with messages

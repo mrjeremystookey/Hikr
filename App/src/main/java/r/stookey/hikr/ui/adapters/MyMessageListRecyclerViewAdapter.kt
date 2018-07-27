@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import r.stookey.hikr.R
+import r.stookey.hikr.db.entity.PostEntity
 
 
 import r.stookey.hikr.ui.fragments.MessageListFragment.OnListFragmentInteractionListener
@@ -17,7 +18,7 @@ import r.stookey.hikr.model.Post
  */
 
 class MyMessageListRecyclerViewAdapter(
-        private val mValues: List<Post>,
+        private val mValues: List<PostEntity>,
         //private val mValues: List<DummyItem>,
         private val mListener: OnListFragmentInteractionListener?)
     : RecyclerView.Adapter<MyMessageListRecyclerViewAdapter.ViewHolder>() {

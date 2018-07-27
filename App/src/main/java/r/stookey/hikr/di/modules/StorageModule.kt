@@ -39,7 +39,9 @@ class StorageModule(context: Context) {
     @Singleton
     @Provides
     fun provideRoomDatabase(): HikrDatabase {
-        return Room.databaseBuilder(mContext, HikrDatabase::class.java, "hikr_db").build()
+        return Room.databaseBuilder(mContext, HikrDatabase::class.java, "hikr_db")
+                .allowMainThreadQueries()
+                .build()
     }
 
     @Singleton

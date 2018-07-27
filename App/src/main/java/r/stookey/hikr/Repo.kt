@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import r.stookey.hikr.db.dao.PostDAO
 import r.stookey.hikr.db.dao.UserDAO
+import r.stookey.hikr.db.entity.PostEntity
 import r.stookey.hikr.di.Injector
 import r.stookey.hikr.model.Post
 import javax.inject.Inject
@@ -17,25 +18,25 @@ class Repo {
 
     private val TAG = "REPO"
 
-    val mUserDAO: UserDAO
-    val mPostDAO: PostDAO
-
-    val firestoreDB: FirebaseFirestore
+    private val mUserDAO: UserDAO
+    private val mPostDAO: PostDAO
+    private val firestoreDB: FirebaseFirestore
 
     init {
+
         mUserDAO = Injector.get().userDAO
         mPostDAO = Injector.get().postDAO
         firestoreDB = Injector.get().firestoreDatabase
     }
 
-    private lateinit var mListLiveData: LiveData<List<Post>>
-    private lateinit var mList: List<Post>
+    private lateinit var mListLiveData: LiveData<List<PostEntity>>
+    private lateinit var mList: List<PostEntity>
     private lateinit var mUID: String
-    private lateinit var mPost: Post
+    private lateinit var mPost: PostEntity
 
 
     /*Public funtion to grab List of Post objects from either local cache, Room or network storage, Firebase*/
-    fun getAllPostsByUserID(uid: String): LiveData<List<Post>> {
+    fun getAllPostsByUserID(uid: String): LiveData<List<PostEntity>> {
         mUID = uid
         if (checkRoomForCache()) {
             return mListLiveData
@@ -73,7 +74,7 @@ class Repo {
         query.get().addOnSuccessListener {
             if (!it.isEmpty) {
                 //Gets List of Post Objects returned by Firestore
-                val list = it.toObjects(Post::class.java)
+                val list = it.toObjects(PostEntity::class.java)
                 cacheAllPostsToRoom(list)
                 mListLiveData.value == list
             } else {
@@ -85,7 +86,7 @@ class Repo {
     /*Caches the list of the User's to the Room Database
     * Is called once the list of Posts is obtained from the Firestore Database
     * */
-    private fun cacheAllPostsToRoom(list: List<Post>) {
+    private fun cacheAllPostsToRoom(list: List<PostEntity>) {
         mUserDAO.updateListOfUserPosts(list)
     }
 
@@ -94,13 +95,14 @@ class Repo {
     /*
     gets Post object from the PostViewModel
     */
-    fun addPostFromViewModel(post: Post) {
+    fun addPostFromViewModel(post: PostEntity) {
         mPost = post
-        addPostToRoomDatabase(mPost)
+        if(post != null)
+            addPostToRoomDatabase(mPost)
     }
 
     //Called as User updates Post and when Post is put into background
-    private fun addPostToRoomDatabase(mPost: Post) {
+    private fun addPostToRoomDatabase(mPost: PostEntity) {
         //TODO Should be completed in another thread
         mPostDAO.addPostToRoom(mPost)
         //TODO if Room data successfully syncs, add data to FireStore
@@ -110,10 +112,10 @@ class Repo {
 
     /*Called once the Post is synced to the Room Database
     uploads the Post to the Firestore Database*/
-    private fun syncPostToFireStore(post: Post) {
+    private fun syncPostToFireStore(post: PostEntity) {
         firestoreDB.collection("Messages")
                 //Sets Document Title to the PostID
-                .document(post.id)
+                .document(post.postID.toString())
                 .set(post)
                 //Once Post is synced to the FireStore
                 .addOnCompleteListener {

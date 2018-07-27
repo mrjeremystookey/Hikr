@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import r.stookey.hikr.viewmodel.UserViewModel
 import r.stookey.hikr.R
+import r.stookey.hikr.db.entity.PostEntity
 import r.stookey.hikr.di.DaggerHikrComponent
 import r.stookey.hikr.di.modules.StorageModule
 
@@ -48,7 +49,7 @@ class MessageListFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_message_list, container, false)
 
-        val listAdapterObserver: Observer<List<Post>> = Observer {
+        val listAdapterObserver: Observer<List<PostEntity>> = Observer {
             if (view is RecyclerView) {
                 with(view) {
                     layoutManager = when {

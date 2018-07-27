@@ -1,6 +1,7 @@
 package r.stookey.hikr.model
 
 
+import android.arch.persistence.room.Ignore
 import android.util.Log
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
@@ -11,6 +12,8 @@ import java.util.*
 @IgnoreExtraProperties
 class Post {
 
+
+    @Ignore
     private val TAG: String = "MESSAGE"
 
     lateinit var createdBy: String
@@ -22,6 +25,7 @@ class Post {
 
     constructor()
 
+    @Ignore
     constructor(id: String?, createdBy: String, title: String, dateCreated: String, text: String, location: String) {
         this.title = title
         this.text = text

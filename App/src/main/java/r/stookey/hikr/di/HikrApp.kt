@@ -1,8 +1,6 @@
-package r.stookey.hikr
+package r.stookey.hikr.di
 
 import android.app.Application
-import r.stookey.hikr.di.DaggerHikrComponent
-import r.stookey.hikr.di.HikrComponent
 import r.stookey.hikr.di.modules.LocationModule
 import r.stookey.hikr.di.modules.StorageModule
 

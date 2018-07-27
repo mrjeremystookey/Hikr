@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.arch.lifecycle.ViewModel
 import android.location.Location
 import r.stookey.hikr.Repo
+import r.stookey.hikr.db.entity.PostEntity
 import r.stookey.hikr.di.Injector
 import r.stookey.hikr.model.Post
 import java.time.LocalDateTime
@@ -36,12 +37,18 @@ class PostViewModel(var userID: String) : ViewModel() {
         mTitleString = title
     }
 
+    fun addPost(){
+        createPostForRepo()
+    }
+
+
+
 
     //Internal functions
     //TODO Will be called when the createdBy clicks pin message
     /*Creates the Post object to be sent to the Repo class for further processing*/
     private fun createPostForRepo() {
-        var mPost = Post(null, userID, mTitleString, getDateOfPostCreation(), mPostText, getLocationOfPost())
+        var mPost = PostEntity(null, userID, mTitleString, getDateOfPostCreation(), mPostText, getLocationOfPost())
         mRepo.addPostFromViewModel(mPost)
     }
 

@@ -1,7 +1,5 @@
 package r.stookey.hikr.di
 
-import r.stookey.hikr.HikrApp
-
 class Injector private constructor(){
 
     companion object {
