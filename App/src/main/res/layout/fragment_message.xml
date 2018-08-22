@@ -3,26 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
     android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     android:background="@drawable/rounded_corners"
     android:elevation="3dp"
     android:orientation="horizontal"
-    android:padding="4dp">
-
-    <TextView
-        android:id="@+id/item_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:visibility="invisible" />
+    android:padding="4dp"
+    android:visibility="visible">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -33,6 +20,7 @@
         android:text="@string/testTitleString"
         android:textColor="@color/textColor"
         android:textSize="18sp"
+        android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/ivMapScreen"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,12 +28,13 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/testDateString"
         android:textColor="@color/textColor"
         android:textSize="16sp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/ivMapScreen"
         app:layout_constraintStart_toEndOf="@+id/ivMapScreen"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
@@ -54,9 +43,10 @@
         android:id="@+id/ivMapScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

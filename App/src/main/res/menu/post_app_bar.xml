@@ -6,21 +6,22 @@
     <!-- "Pin Message", should appear as action button if possible -->
     <item
         android:id="@+id/pin"
-        android:icon="@drawable/pin_icon_appbar"
+        android:enabled="true"
+        android:icon="@drawable/appbar_pin"
         android:iconTint="@color/textColor"
         android:title="Pin"
-        app:showAsAction="always"
-        android:visible="true" />
+        android:visible="true"
+        app:showAsAction="always" />
 
     <!-- Show Map, Always appear -->
     <item
         android:id="@+id/menu_map"
-        android:icon="@drawable/map_icon_appbar"
-        android:title="Map"
+        android:enabled="true"
+        android:icon="@drawable/appbar_map"
         android:iconTint="@color/textColor"
-        app:showAsAction="always"
-        android:visible="true" />
-
+        android:title="Map"
+        android:visible="true"
+        app:showAsAction="always" />
 
 
 

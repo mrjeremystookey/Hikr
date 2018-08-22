@@ -8,7 +8,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.login_flow.*
+import kotlinx.android.synthetic.main.activity_login.*
 import r.stookey.hikr.R
 import r.stookey.hikr.di.Injector
 
@@ -26,7 +26,7 @@ class Login : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_flow)
+        setContentView(R.layout.activity_login)
         bLogin.setOnClickListener(this)
         loginIntent = Intent(this, Main::class.java)
 

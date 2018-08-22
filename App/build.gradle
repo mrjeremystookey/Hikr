@@ -24,6 +24,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 configurations {
@@ -69,6 +73,11 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.13'
     kapt "com.github.hotchemi:permissionsdispatcher-processor:3.3.1"
     kapt 'com.google.dagger:dagger-compiler:2.13'
+
+    def anko_version = '0.10.5'
+    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
+
+
 
 
 

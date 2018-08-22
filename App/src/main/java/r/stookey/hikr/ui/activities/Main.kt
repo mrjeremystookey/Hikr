@@ -2,8 +2,6 @@ package r.stookey.hikr.ui.activities
 
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -15,10 +13,7 @@ import android.support.v4.app.Fragment
 
 
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -30,26 +25,18 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.main_page.*
-import r.stookey.hikr.viewmodel.PostViewModel
-import r.stookey.hikr.viewmodel.UserViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import r.stookey.hikr.R
-import r.stookey.hikr.Repo
 import r.stookey.hikr.di.Injector
-import r.stookey.hikr.model.Post
-import r.stookey.hikr.ui.fragments.MessageListFragment
 import r.stookey.hikr.ui.fragments.PostFragment
+import r.stookey.hikr.ui.fragments.PostListFragment
 import r.stookey.hikr.ui.fragments.ProfileFragment
-import r.stookey.hikr.viewmodel.ViewModelFactory
-
-import javax.inject.Inject
 
 class Main : AppCompatActivity(),
         BottomNavigationView.OnNavigationItemSelectedListener,
-        MessageListFragment.OnListFragmentInteractionListener,
         LocationListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        Toolbar.OnMenuItemClickListener {
+        GoogleApiClient.OnConnectionFailedListener
+        {
 
     private val TAG: String = "POST"
 
@@ -61,55 +48,45 @@ class Main : AppCompatActivity(),
         mLocationManager = Injector.get().locationManager
     }
 
-    //First Created ViewModels
-    private val userViewModel by lazy {
-        ViewModelProviders.of(this, ViewModelFactory(intent.getStringExtra("userID"))).get(UserViewModel::class.java)
-    }
-    private val postViewModel by lazy {
-        ViewModelProviders.of(this, ViewModelFactory(intent.getStringExtra("userID")) ).get(PostViewModel::class.java)
-    }
-
     private lateinit var mUserID: String
     private lateinit var mUsername: String
-
-
+    private lateinit var fragment: PostFragment
 
 
 
     //Location declarations
     private var mGoogleApiClient: GoogleApiClient? = null
     private var mLocation: Location? = null
-
-
     private var mLocationRequest: LocationRequest? = null
     private val UPDATE_INTERVAL = (2 * 1000).toLong()  /* 10 secs */
     private val FASTEST_INTERVAL: Long = 2000 /* 2 sec */
-
     lateinit var mapFragment: SupportMapFragment
     lateinit var googleMap: GoogleMap
 
-    private var postFragment: PostFragment = PostFragment()
+
     private var content: ConstraintLayout? = null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_page)
-        setSupportActionBar(findViewById(R.id.appbar))
+        setContentView(R.layout.activity_main)
         Log.d(TAG, "Main activity started")
-
         if (!checkPermissions()) {
             requestPermissions()
         }
 
+
         getUserProperties()
         initializeLocation()
-        setUpNavigationBar()
-        setUpActionBar()
-
+        setupUI()
         content = findViewById(R.id.content)
-        postFragment = PostFragment.newInstance()
-        addFragment(postFragment)
+        fragment = PostFragment.newInstance(mUserID)
+        addFragment(fragment)
+
     }
+
+
 
     override fun onStart() {
         super.onStart()
@@ -125,44 +102,33 @@ class Main : AppCompatActivity(),
         }
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        if(item!!.itemId == R.id.pin){
-            //TODO Pin Current Fragment Message to the Map at Known Location
 
-        } else{
-            //TODO Show Map View of the area and populate with Messages
-        }
-        return true
-    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            //TODO Creating only one version of the fragment and not a new one whenever the bottom nav is used
             R.id.action_all_posts -> {
-                val allPostsFragment = MessageListFragment.newInstance()
+                val allPostsFragment = PostListFragment.newInstance(mUserID)
                 addFragment(allPostsFragment)
             }
             R.id.action_user_profile -> {
                 val profileFragment = ProfileFragment.newInstance(mUserID)
-                mapFragment
                 addFragment(profileFragment)
             }
             R.id.action_new_post -> {
-                addFragment(postFragment)
+                addFragment(fragment)
             }
         }
         return false
     }
 
-    private fun setUpNavigationBar(){
+    private fun setupUI(){
         bottomNavigationView.menu.findItem(R.id.action_user_profile).title = mUsername
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
+
     }
 
-    private fun setUpActionBar(){
-        toolbar.title = "Create Post"
-        toolbar.inflateMenu(R.menu.post_app_bar)
-        toolbar.setOnMenuItemClickListener(this)
-    }
+
 
     private fun getUserProperties(){
         mUserID = intent.getStringExtra("userID")
@@ -211,8 +177,6 @@ class Main : AppCompatActivity(),
     override fun onConnected(p0: Bundle?) {
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
         //Setting Location for the View Models
-        userViewModel.setLocation(mLocation!!)
-        postViewModel.setLocation(mLocation!!)
         googleMap.addMarker(MarkerOptions().position(LatLng(mLocation!!.latitude, mLocation!!.longitude)).title("Current Location"))
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(mLocation!!.latitude, mLocation!!.longitude), 15f))
     }
@@ -254,7 +218,5 @@ class Main : AppCompatActivity(),
         }
     }
 
-    override fun onListFragmentInteraction(item: Post?) {
 
-    }
 }

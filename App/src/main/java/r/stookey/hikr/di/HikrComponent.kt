@@ -14,6 +14,7 @@ import r.stookey.hikr.db.dao.UserDAO
 import r.stookey.hikr.di.modules.LocationModule
 import r.stookey.hikr.di.modules.StorageModule
 import r.stookey.hikr.ui.activities.Login
+import r.stookey.hikr.viewmodel.ViewModelFactory
 import javax.inject.Singleton
 
 
@@ -29,5 +30,6 @@ interface HikrComponent {
     var firebaseAuth: FirebaseAuth
     var context: Context
     var locationManager: LocationManager
+//    var viewModelFactory: ViewModelFactory
 
 }

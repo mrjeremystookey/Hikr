@@ -2,25 +2,22 @@ package r.stookey.hikr.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.google.firebase.auth.FirebaseAuth
-import dagger.MapKey
 import r.stookey.hikr.Repo
-import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.reflect.KClass
 
 
 @Singleton
 class ViewModelFactory(val userID: String?) : ViewModelProvider.Factory {
 
-    var repo = Repo()
-//    @Inject lateinit var repo: Repo
+
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PostViewModel::class.java)) {
             return PostViewModel(userID!!) as T
+        } else if (modelClass.isAssignableFrom(ListViewModel::class.java)){
+            return ListViewModel(userID!!) as T
         } else {
-            return UserViewModel(userID!!) as T
+            return ProfileViewModel() as T
         }
     }
 }
@@ -46,8 +43,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(UserViewModel::class)
-    internal  abstract fun userViewModel(viewModel: UserViewModel): ViewModel
+    @ViewModelKey(ListViewModel::class)
+    internal  abstract fun userViewModel(viewModel: ListViewModel): ViewModel
 
 
 

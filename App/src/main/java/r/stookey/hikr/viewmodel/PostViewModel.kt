@@ -48,7 +48,7 @@ class PostViewModel(var userID: String) : ViewModel() {
     //TODO Will be called when the createdBy clicks pin message
     /*Creates the Post object to be sent to the Repo class for further processing*/
     private fun createPostForRepo() {
-        var mPost = PostEntity(null, userID, mTitleString, getDateOfPostCreation(), mPostText, getLocationOfPost())
+        var mPost = PostEntity(null, userID, getDateOfPostCreation(), getLocationOfPost(), mPostText, mTitleString)
         mRepo.addPostFromViewModel(mPost)
     }
 

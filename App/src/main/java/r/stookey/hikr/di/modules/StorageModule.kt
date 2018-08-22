@@ -12,6 +12,7 @@ import r.stookey.hikr.Repo
 import r.stookey.hikr.db.HikrDatabase
 import r.stookey.hikr.db.dao.PostDAO
 import r.stookey.hikr.db.dao.UserDAO
+import r.stookey.hikr.viewmodel.ViewModelFactory
 import javax.inject.Singleton
 
 
@@ -70,4 +71,6 @@ class StorageModule(context: Context) {
     fun providesFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
+
+
 }
