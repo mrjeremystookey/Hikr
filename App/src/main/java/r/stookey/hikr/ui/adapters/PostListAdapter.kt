@@ -22,7 +22,6 @@ class PostListAdapter: RecyclerView.Adapter<PostListAdapter.ViewHolder>() {
 
     var mValues: List<PostEntity> = emptyList()
 
-
     fun loadValues(items: List<PostEntity>){
         mValues = items
     }
@@ -34,7 +33,7 @@ class PostListAdapter: RecyclerView.Adapter<PostListAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind("test", "test")
+        holder.bind(mValues[position].title!!, mValues[position].date!!)
     }
 
     override fun getItemCount(): Int = mValues.size

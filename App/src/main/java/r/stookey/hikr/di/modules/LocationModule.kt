@@ -1,8 +1,6 @@
 package r.stookey.hikr.di.modules
 
-import android.app.Application
 import android.content.Context
-import android.location.Location
 import android.location.LocationManager
 import dagger.Module
 import dagger.Provides

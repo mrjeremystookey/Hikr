@@ -3,7 +3,6 @@ package r.stookey.hikr.db.entity
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
-import r.stookey.hikr.model.Post
 
 
 @Entity(tableName = "createdBy")

@@ -3,20 +3,17 @@ package r.stookey.hikr.ui.fragments
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import r.stookey.hikr.viewmodel.ListViewModel
 import r.stookey.hikr.R
-
 import r.stookey.hikr.ui.adapters.PostListAdapter
+import r.stookey.hikr.viewmodel.ListViewModel
 import r.stookey.hikr.viewmodel.ViewModelFactory
 
 /**
@@ -47,6 +44,7 @@ class PostListFragment : Fragment() {
         arguments?.getString("userID")?.let {
             mUserID = it
         }
+        //Factory should be injected
         val factory = ViewModelFactory(mUserID)
         viewModel = ViewModelProviders.of(activity!!, factory).get(ListViewModel::class.java)
 
@@ -71,7 +69,6 @@ class PostListFragment : Fragment() {
             }
         })
     }
-
 
 
 

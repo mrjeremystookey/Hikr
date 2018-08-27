@@ -1,7 +1,6 @@
 package r.stookey.hikr.di
 
 
-import android.app.Application
 import android.content.Context
 import android.location.LocationManager
 import com.google.firebase.auth.FirebaseAuth
@@ -13,8 +12,6 @@ import r.stookey.hikr.db.dao.PostDAO
 import r.stookey.hikr.db.dao.UserDAO
 import r.stookey.hikr.di.modules.LocationModule
 import r.stookey.hikr.di.modules.StorageModule
-import r.stookey.hikr.ui.activities.Login
-import r.stookey.hikr.viewmodel.ViewModelFactory
 import javax.inject.Singleton
 
 

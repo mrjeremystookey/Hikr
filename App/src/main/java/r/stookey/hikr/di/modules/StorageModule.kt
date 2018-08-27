@@ -1,18 +1,16 @@
 package r.stookey.hikr.di.modules
 
-import android.app.Application
 import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import dagger.Module
 import dagger.Provides
 import r.stookey.hikr.Repo
 import r.stookey.hikr.db.HikrDatabase
 import r.stookey.hikr.db.dao.PostDAO
 import r.stookey.hikr.db.dao.UserDAO
-import r.stookey.hikr.viewmodel.ViewModelFactory
 import javax.inject.Singleton
 
 
@@ -62,6 +60,9 @@ class StorageModule(context: Context) {
     @Singleton
     @Provides
     fun providesFireStore(): FirebaseFirestore {
+        var settings = FirebaseFirestoreSettings.Builder().setTimestampsInSnapshotsEnabled(true).build()
+        var firestore = FirebaseFirestore.getInstance()
+        firestore.firestoreSettings = settings
         return FirebaseFirestore.getInstance()
 
     }

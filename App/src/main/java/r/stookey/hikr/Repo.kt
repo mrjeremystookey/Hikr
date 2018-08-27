@@ -39,12 +39,12 @@ class Repo {
     }
 
 
-
     /*Checks Room Database for local cache of List of Posts
       if true sets LiveData value and returns
     */
     private fun checkRoomForCache(): MutableLiveData<List<PostEntity>> {
         val mMutableLiveData = MutableLiveData<List<PostEntity>>()
+        Log.d(TAG, mUserDAO.getUserPostsByID(mUID).toString())
         if (!mUserDAO.getUserPostsByID(mUID).isEmpty()) {
             mList = mUserDAO.getUserPostsByID(mUID)
             mMutableLiveData.value = mList
@@ -71,6 +71,8 @@ class Repo {
             } else {
                 Log.d(TAG, "Unable to create tmpPost, no data found in FireStore")
             }
+        }.addOnFailureListener {
+            Log.d(TAG, "unable to reach the FireStore Database")
         }
         return mMutableLiveData
     }

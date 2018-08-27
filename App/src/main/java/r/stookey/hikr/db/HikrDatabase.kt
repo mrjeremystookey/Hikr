@@ -3,7 +3,6 @@ package r.stookey.hikr.db
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.db.SupportSQLiteOpenHelper
 import android.arch.persistence.room.*
-import android.content.Context
 import r.stookey.hikr.db.dao.PostDAO
 import r.stookey.hikr.db.dao.UserDAO
 import r.stookey.hikr.db.entity.PostEntity

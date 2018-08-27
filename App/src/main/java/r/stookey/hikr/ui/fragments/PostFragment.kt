@@ -6,7 +6,10 @@ import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_new_post.*
 import r.stookey.hikr.R
@@ -19,6 +22,7 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
     private var messageString: String = ""
     private var titleString: String = ""
     private lateinit var mUserID: String
+
 
 
     companion object {
@@ -41,6 +45,8 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
         arguments?.getString("userID")?.let {
             mUserID = it
         }
+
+
         var fabAddPost = view.findViewById<FloatingActionButton>(R.id.fabAddPost)
         fabAddPost.setOnClickListener(this)
         setHasOptionsMenu(true)

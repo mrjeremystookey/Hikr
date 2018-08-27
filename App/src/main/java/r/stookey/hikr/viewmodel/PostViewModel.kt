@@ -6,13 +6,11 @@ import android.location.Location
 import r.stookey.hikr.Repo
 import r.stookey.hikr.db.entity.PostEntity
 import r.stookey.hikr.di.Injector
-import r.stookey.hikr.model.Post
 import java.time.LocalDateTime
-import javax.inject.Inject
 
 
 //class PostViewModel(@Inject val uid: String, @Inject val repo: Repo): ViewModel(){
-class PostViewModel(var userID: String) : ViewModel() {
+class PostViewModel constructor(var userID: String) : ViewModel() {
 
     private val mRepo: Repo
 
