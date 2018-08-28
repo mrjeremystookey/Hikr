@@ -2,7 +2,6 @@ package r.stookey.hikr.viewmodel
 
 import android.annotation.TargetApi
 import android.arch.lifecycle.ViewModel
-import android.location.Location
 import r.stookey.hikr.Repo
 import r.stookey.hikr.db.entity.PostEntity
 import r.stookey.hikr.di.Injector
@@ -21,18 +20,21 @@ class PostViewModel constructor(var userID: String) : ViewModel() {
     //Post and User Information
     private lateinit var mPostText: String
     private lateinit var mTitleString: String
-    private lateinit var mLocation: Location
+    private lateinit var mLocation: String
 
 
     /*Called in Main Activity once Location is set*/
-    fun setLocation(location: Location) {
+    fun setLocation(location: String) {
         mLocation = location
     }
 
     /*Called when text in the Title or Post Body is changed*/
-    fun addPostTextToModelView(text: String, title: String) {
-        mPostText = text
+    fun updateTitle(title: String) {
         mTitleString = title
+    }
+
+    fun updateBody(body: String) {
+        mPostText = body
     }
 
     fun addPost(){
@@ -46,15 +48,13 @@ class PostViewModel constructor(var userID: String) : ViewModel() {
     //TODO Will be called when the createdBy clicks pin message
     /*Creates the Post object to be sent to the Repo class for further processing*/
     private fun createPostForRepo() {
-        var mPost = PostEntity(null, userID, getDateOfPostCreation(), getLocationOfPost(), mPostText, mTitleString)
+        var mPost = PostEntity(null, userID, getDateOfPostCreation(), mLocation, mPostText, mTitleString)
         mRepo.addPostFromViewModel(mPost)
     }
 
 
     //Utility Functions
-    private fun getLocationOfPost(): String {
-        return " '" + mLocation.latitude.toString() + ", " + mLocation.longitude.toString() + "' "
-    }
+
 
     @TargetApi(26)
     private fun getDateOfPostCreation(): String {

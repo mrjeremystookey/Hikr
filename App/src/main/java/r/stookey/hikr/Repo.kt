@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.pawegio.kandroid.d
 import r.stookey.hikr.db.dao.PostDAO
 import r.stookey.hikr.db.dao.UserDAO
 import r.stookey.hikr.db.entity.PostEntity
@@ -31,11 +32,20 @@ class Repo {
 
     /*Public funtion to grab List of Post objects from either local cache, Room or network storage, Firebase*/
     fun getAllPostsByUserID(uid: String): MutableLiveData<List<PostEntity>> {
-        mUID = uid
+        /*mUID = uid
         if (checkRoomForCache().value !== null)
             return checkRoomForCache()
         else
-            return getAllPostsByUserIDFromFireStore()
+            return getAllPostsByUserIDFromFireStore()*/
+        val liveDataList = MutableLiveData<List<PostEntity>>()
+        liveDataList.value = getPostsByUserID(uid)
+        return liveDataList
+    }
+
+    private fun getPostsByUserID(uid: String): List<PostEntity> {
+        val listOfPosts = mUserDAO.getUserPostsByID(uid)
+        d { listOfPosts.toString() }
+        return listOfPosts
     }
 
 

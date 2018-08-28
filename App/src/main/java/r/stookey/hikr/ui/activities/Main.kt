@@ -62,7 +62,7 @@ class Main : AppCompatActivity(),
     private val FASTEST_INTERVAL: Long = 2000 /* 2 sec */
     lateinit var mapFragment: SupportMapFragment
     lateinit var googleMap: GoogleMap
-
+            private lateinit var mLocationString: String
 
     private var content: ConstraintLayout? = null
 
@@ -85,16 +85,12 @@ class Main : AppCompatActivity(),
         addFragment(fragment)
 
     }
-
-
-
     override fun onStart() {
         super.onStart()
         if (mGoogleApiClient != null) {
             mGoogleApiClient!!.connect()
         }
     }
-
     override fun onStop() {
         super.onStop()
         if (mGoogleApiClient!!.isConnected()) {
@@ -121,7 +117,6 @@ class Main : AppCompatActivity(),
         }
         return false
     }
-
     private fun setupUI(){
         bottomNavigationView.menu.findItem(R.id.action_user_profile).title = mUsername
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
@@ -135,6 +130,17 @@ class Main : AppCompatActivity(),
         mUsername = intent.getStringExtra("username")
     }
 
+            private fun addFragment(fragment: Fragment) {
+                supportFragmentManager
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out)
+                        .replace(R.id.content, fragment, fragment.tag)
+                        .addToBackStack(fragment.javaClass.getSimpleName())
+                        .commit()
+                Log.d(TAG, "addFragment(): fragment changed")
+            }
+
+
     private fun initializeLocation() {
         mGoogleApiClient = GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -147,16 +153,6 @@ class Main : AppCompatActivity(),
         mapFragment.getMapAsync {
             googleMap = it
         }
-    }
-
-    private fun addFragment(fragment: Fragment) {
-        supportFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out)
-                .replace(R.id.content, fragment, fragment.tag)
-                .addToBackStack(fragment.javaClass.getSimpleName())
-                .commit()
-        Log.d(TAG, "addFragment(): fragment changed")
     }
 
     @SuppressLint("MissingPermission")
@@ -177,6 +173,8 @@ class Main : AppCompatActivity(),
     override fun onConnected(p0: Bundle?) {
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
         //Setting Location for the View Models
+        mLocationString = getLocationOfPost(mLocation)
+        fragment.setLocation(mLocationString)
         googleMap.addMarker(MarkerOptions().position(LatLng(mLocation!!.latitude, mLocation!!.longitude)).title("Current Location"))
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(mLocation!!.latitude, mLocation!!.longitude), 15f))
     }
@@ -189,6 +187,12 @@ class Main : AppCompatActivity(),
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
         Log.i(TAG, "Connection failed. Error: " + connectionResult.getErrorCode())
     }
+
+            private fun getLocationOfPost(location: Location?): String {
+                return " '" + mLocation!!.latitude.toString() + ", " + mLocation!!.longitude.toString() + "' "
+            }
+
+
 
     //Permissions remain in the activity, don't go to a ViewModel
     private fun checkPermissions(): Boolean {

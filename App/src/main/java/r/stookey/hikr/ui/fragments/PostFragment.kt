@@ -1,34 +1,37 @@
 package r.stookey.hikr.ui.fragments
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.pawegio.kandroid.d
+import com.pawegio.kandroid.textWatcher
+import com.pawegio.kandroid.toast
 import kotlinx.android.synthetic.main.fragment_new_post.*
 import r.stookey.hikr.R
+import r.stookey.hikr.viewmodel.PostViewModel
+import r.stookey.hikr.viewmodel.ViewModelFactory
 
 class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.Toolbar.OnMenuItemClickListener
 {
 
-    private val TAG = "POSTFRAGMENT"
+    private val TAG = "PostFragment"
 
-    private var messageString: String = ""
-    private var titleString: String = ""
     private lateinit var mUserID: String
-
+    private lateinit var mLocation: String
+    private lateinit var viewModel: PostViewModel
 
 
     companion object {
-        fun newInstance(userID: String) = PostFragment().apply {
+        fun newInstance(userID: String/*, location: String*/) = PostFragment().apply {
             arguments = Bundle().apply {
                 putString("userID", userID)
+//                putString("location", location)
             }
         }
     }
@@ -36,6 +39,7 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
 
@@ -45,17 +49,34 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
         arguments?.getString("userID")?.let {
             mUserID = it
         }
-
+        arguments?.getString("location")?.let {
+            mLocation = it
+        }
 
         var fabAddPost = view.findViewById<FloatingActionButton>(R.id.fabAddPost)
         fabAddPost.setOnClickListener(this)
         setHasOptionsMenu(true)
 
+        val toolbar = activity!!.findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = "Create Post"
+        toolbar.setTitleTextColor(resources.getColor(R.color.textColor))
+        toolbar.setBackgroundColor(resources.getColor(R.color.colorPrimaryDark))
+        toolbar.inflateMenu(R.menu.post_app_bar)
+        toolbar.setOnMenuItemClickListener(this)
 
+        val factory = ViewModelFactory(mUserID)
+        viewModel = ViewModelProviders.of(activity!!, factory).get(PostViewModel::class.java)
+
+        //Testing
+        d { viewModel.userID }
 
         return view
     }
 
+    fun setLocation(location: String) {
+        mLocation = location
+        viewModel.setLocation(location)
+    }
 
     /**
      * This method will be invoked when a menu item is clicked if the item itself did
@@ -65,25 +86,21 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
      * @return `true` if the event was handled, `false` otherwise.
      */
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        if(item!!.itemId == R.id.pin){
-            //TODO Inflate Map Pop up icon with Post Info at current location
-            Log.d(TAG, "pin clicked")
-            if(messageString.isBlank() || titleString.isBlank()){
-                val text = "Must have title and post"
-                val duration = Toast.LENGTH_SHORT
-                val toast = Toast.makeText(activity, text, duration)
-                toast.show()
-            }else{
-/*
-                postViewModel.addPost()
-*/
+        when (item!!.itemId) {
+            R.id.pin -> {
+                d { "pin clicked" }
+                if (etBody.text.isBlank() || etTitle.text.isBlank()) {
+                    toast("Must have title and body")
+                } else {
+                    viewModel.addPost()
+                }
             }
-            return true
-        }else{
-            //TODO Hide Current post to show map
-            Log.d(TAG, "map clicked")
-            return true
+            R.id.map -> {
+                d { "map clicked" }
+
+            }
         }
+        return true
     }
 
     override fun onClick(v: View?) {
@@ -92,40 +109,18 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Log.d(TAG, "onActivityCreated(): parent activity fully loaded" )
-        etText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                textChanged()
+        d { "onActivityCreated(): parent activity loaded" }
+        etBody.textWatcher {
+            afterTextChanged {
+                viewModel.updateBody(it.toString())
             }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+        etTitle.textWatcher {
+            afterTextChanged {
+                viewModel.updateTitle(it.toString())
             }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-        })
-        etTitle.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                textChanged()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-        })
-
-
+        }
     }
 
 
-    private fun textChanged(){
-        messageString = etText.text.toString()
-        titleString = etTitle.text.toString()
-/*
-        postViewModel.addPostTextToModelView(messageString, titleString)
-*/
-    }
 }
