@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_main.*
 import r.stookey.hikr.R
+import r.stookey.hikr.UserPref
 import r.stookey.hikr.di.Injector
 import r.stookey.hikr.ui.fragments.PostFragment
 import r.stookey.hikr.ui.fragments.PostListFragment
@@ -43,6 +44,7 @@ class Main : AppCompatActivity(),
     private val LOCATION_REQUEST_CODE: Int = 10
     private val permissions = arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
     private val mLocationManager: LocationManager
+            private val user = UserPref()
 
     init {
         mLocationManager = Injector.get().locationManager
@@ -69,6 +71,7 @@ class Main : AppCompatActivity(),
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d(TAG, "Main activity started")
@@ -96,6 +99,7 @@ class Main : AppCompatActivity(),
         if (mGoogleApiClient!!.isConnected()) {
             mGoogleApiClient!!.disconnect()
         }
+        user.saveLoginInfo(this, intent.getStringExtra("username"), intent.getStringExtra("userID"))
     }
 
 
@@ -126,8 +130,13 @@ class Main : AppCompatActivity(),
 
 
     private fun getUserProperties(){
-        mUserID = intent.getStringExtra("userID")
-        mUsername = intent.getStringExtra("username")
+        if (user.isLoggedIn(this)) {
+            mUserID = user.getUserID(this)
+            mUsername = user.getUsername(this)
+        } else {
+            mUsername = intent.getStringExtra("username")
+            mUserID = intent.getStringExtra("userID")
+        }
     }
 
             private fun addFragment(fragment: Fragment) {

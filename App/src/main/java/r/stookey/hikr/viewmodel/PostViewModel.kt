@@ -2,20 +2,14 @@ package r.stookey.hikr.viewmodel
 
 import android.annotation.TargetApi
 import android.arch.lifecycle.ViewModel
-import r.stookey.hikr.Repo
 import r.stookey.hikr.db.entity.PostEntity
 import r.stookey.hikr.di.Injector
 import java.time.LocalDateTime
 
 
-//class PostViewModel(@Inject val uid: String, @Inject val repo: Repo): ViewModel(){
 class PostViewModel constructor(var userID: String) : ViewModel() {
 
-    private val mRepo: Repo
-
-    init {
-        mRepo = Injector.get().repo
-    }
+    private val mRepo = Injector.get().repo
 
     //Post and User Information
     private lateinit var mPostText: String
@@ -43,7 +37,6 @@ class PostViewModel constructor(var userID: String) : ViewModel() {
 
 
 
-
     //Internal functions
     //TODO Will be called when the createdBy clicks pin message
     /*Creates the Post object to be sent to the Repo class for further processing*/
@@ -54,12 +47,9 @@ class PostViewModel constructor(var userID: String) : ViewModel() {
 
 
     //Utility Functions
-
-
     @TargetApi(26)
     private fun getDateOfPostCreation(): String {
-        val dateTime = LocalDateTime.now().toString()
-        return dateTime
+        return LocalDateTime.now().toString()
     }
 
 

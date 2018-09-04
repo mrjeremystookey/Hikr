@@ -64,7 +64,7 @@ class PostListFragment : Fragment() {
 
     private fun subscribetoUI(adapter: PostListAdapter){
         viewModel.getAllPostsByUserID().observe(this, Observer {
-            if(it!= null){
+            if (it != null) {
                 adapter.loadValues(it)
             }
         })

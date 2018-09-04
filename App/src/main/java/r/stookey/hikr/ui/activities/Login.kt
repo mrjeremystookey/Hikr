@@ -1,27 +1,26 @@
 package r.stookey.hikr.ui.activities
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import r.stookey.hikr.R
+import r.stookey.hikr.UserPref
 import r.stookey.hikr.di.Injector
 
 
 class Login : AppCompatActivity(), View.OnClickListener {
 
     private val TAG: String = "LOGIN"
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth = Injector.get().firebaseAuth
     private lateinit var loginIntent: Intent
-
-    init {
-        firebaseAuth = Injector.get().firebaseAuth
-    }
+    private val prefsFilename = "com.stookey.hikr.prefs"
+    private var sharedPreferences: SharedPreferences? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +28,7 @@ class Login : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_login)
         bLogin.setOnClickListener(this)
         loginIntent = Intent(this, Main::class.java)
+        sharedPreferences = this.getSharedPreferences(prefsFilename, 0)
 
     }
 
@@ -51,8 +51,11 @@ class Login : AppCompatActivity(), View.OnClickListener {
         progressBar.visibility = VISIBLE
         firebaseAuth.signInWithEmailAndPassword(etEmailLogin.text.toString(), etPasswordLogin.text.toString()).addOnCompleteListener {
             if (it.isSuccessful) {
-                loginIntent.putExtra("userID", firebaseAuth.currentUser!!.uid)
-                loginIntent.putExtra("username", firebaseAuth.currentUser!!.displayName)
+                var user = firebaseAuth.currentUser!!
+                loginIntent.putExtra("userID", user.uid)
+                loginIntent.putExtra("username", user.displayName)
+                var userPref = UserPref()
+                userPref.setLoggedIn(this, true)
                 startActivity(loginIntent)
             } else {
                 tvIncorrectEmailPassword.text = "Email address or password is incorrect"

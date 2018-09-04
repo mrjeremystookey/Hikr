@@ -32,69 +32,42 @@ class Repo {
 
     /*Public funtion to grab List of Post objects from either local cache, Room or network storage, Firebase*/
     fun getAllPostsByUserID(uid: String): MutableLiveData<List<PostEntity>> {
-        /*mUID = uid
-        if (checkRoomForCache().value !== null)
-            return checkRoomForCache()
-        else
-            return getAllPostsByUserIDFromFireStore()*/
         val liveDataList = MutableLiveData<List<PostEntity>>()
         liveDataList.value = getPostsByUserID(uid)
         return liveDataList
     }
 
+
     private fun getPostsByUserID(uid: String): List<PostEntity> {
-        val listOfPosts = mUserDAO.getUserPostsByID(uid)
+        //Local Retrieval
+        var listOfPosts = mUserDAO.getUserPostsByID(uid)
+        //Remote Retrieval
+        if (listOfPosts == null) {
+            listOfPosts = getAllPostsByUserIDFromFireStore()
+        }
         d { listOfPosts.toString() }
         return listOfPosts
     }
 
 
-    /*Checks Room Database for local cache of List of Posts
-      if true sets LiveData value and returns
-    */
-    private fun checkRoomForCache(): MutableLiveData<List<PostEntity>> {
-        val mMutableLiveData = MutableLiveData<List<PostEntity>>()
-        Log.d(TAG, mUserDAO.getUserPostsByID(mUID).toString())
-        if (!mUserDAO.getUserPostsByID(mUID).isEmpty()) {
-            mList = mUserDAO.getUserPostsByID(mUID)
-            mMutableLiveData.value = mList
-        }
-        return mMutableLiveData
-    }
-
-    /*
-    Sets the mListLiveData to the List of Post objects returned from FireStore
-    */
-    private fun getAllPostsByUserIDFromFireStore(): MutableLiveData<List<PostEntity>> {
+    private fun getAllPostsByUserIDFromFireStore(): List<PostEntity> {
         val collectionReference = firestoreDB.collection("Messages")
         val query: Query = collectionReference.whereEqualTo("created_by", mUID)
-        val mMutableLiveData = MutableLiveData<List<PostEntity>>()
-
+        var list = emptyList<PostEntity>()
         //fun level property for holding the values returned from
         //var tmpPost = Post()
         query.get().addOnSuccessListener {
             if (!it.isEmpty) {
                 //Gets List of Post Objects returned by Firestore
-                val list = it.toObjects(PostEntity::class.java)
-                cacheAllPostsToRoom(list)
-                mMutableLiveData.value = list
+                list = it.toObjects(PostEntity::class.java)
             } else {
                 Log.d(TAG, "Unable to create tmpPost, no data found in FireStore")
             }
         }.addOnFailureListener {
             Log.d(TAG, "unable to reach the FireStore Database")
         }
-        return mMutableLiveData
+        return list
     }
-
-    /*Caches the list of the User's to the Room Database
-    * Is called once the list of Posts is obtained from the Firestore Database
-    * */
-    private fun cacheAllPostsToRoom(list: List<PostEntity>) {
-        mUserDAO.updateListOfUserPosts(list)
-    }
-
-
 
 
     /*
