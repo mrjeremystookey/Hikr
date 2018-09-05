@@ -36,15 +36,14 @@ import r.stookey.hikr.ui.fragments.ProfileFragment
 class Main : AppCompatActivity(),
         BottomNavigationView.OnNavigationItemSelectedListener,
         LocationListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener
-        {
+        GoogleApiClient.OnConnectionFailedListener {
 
     private val TAG: String = "POST"
 
     private val LOCATION_REQUEST_CODE: Int = 10
     private val permissions = arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION)
     private val mLocationManager: LocationManager
-            private val user = UserPref()
+    private val user = UserPref()
 
     init {
         mLocationManager = Injector.get().locationManager
@@ -55,7 +54,6 @@ class Main : AppCompatActivity(),
     private lateinit var fragment: PostFragment
 
 
-
     //Location declarations
     private var mGoogleApiClient: GoogleApiClient? = null
     private var mLocation: Location? = null
@@ -64,10 +62,9 @@ class Main : AppCompatActivity(),
     private val FASTEST_INTERVAL: Long = 2000 /* 2 sec */
     lateinit var mapFragment: SupportMapFragment
     lateinit var googleMap: GoogleMap
-            private lateinit var mLocationString: String
+    private lateinit var mLocationString: String
 
     private var content: ConstraintLayout? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,76 +76,43 @@ class Main : AppCompatActivity(),
             requestPermissions()
         }
 
-
-        getUserProperties()
-        initializeLocation()
-        setupUI()
-        content = findViewById(R.id.content)
-        fragment = PostFragment.newInstance(mUserID)
-        addFragment(fragment)
-
-    }
-    override fun onStart() {
-        super.onStart()
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient!!.connect()
-        }
-    }
-    override fun onStop() {
-        super.onStop()
-        if (mGoogleApiClient!!.isConnected()) {
-            mGoogleApiClient!!.disconnect()
-        }
-        user.saveLoginInfo(this, intent.getStringExtra("username"), intent.getStringExtra("userID"))
-    }
-
-
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            //TODO Creating only one version of the fragment and not a new one whenever the bottom nav is used
-            R.id.action_all_posts -> {
-                val allPostsFragment = PostListFragment.newInstance(mUserID)
-                addFragment(allPostsFragment)
-            }
-            R.id.action_user_profile -> {
-                val profileFragment = ProfileFragment.newInstance(mUserID)
-                addFragment(profileFragment)
-            }
-            R.id.action_new_post -> {
-                addFragment(fragment)
-            }
-        }
-        return false
-    }
-    private fun setupUI(){
-        bottomNavigationView.menu.findItem(R.id.action_user_profile).title = mUsername
-        bottomNavigationView.setOnNavigationItemSelectedListener(this)
-
-    }
-
-
-
-    private fun getUserProperties(){
         if (user.isLoggedIn(this)) {
+            //TODO Retrieve the username and userid from Preferences if logged in
             mUserID = user.getUserID(this)
             mUsername = user.getUsername(this)
         } else {
             mUsername = intent.getStringExtra("username")
             mUserID = intent.getStringExtra("userID")
         }
+
+        initializeLocation()
+        setupUI()
+        content = findViewById(R.id.content)
+        fragment = PostFragment.newInstance(mUserID!!)
+        addFragment(fragment)
+
     }
 
-            private fun addFragment(fragment: Fragment) {
-                supportFragmentManager
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out)
-                        .replace(R.id.content, fragment, fragment.tag)
-                        .addToBackStack(fragment.javaClass.getSimpleName())
-                        .commit()
-                Log.d(TAG, "addFragment(): fragment changed")
-            }
+    override fun onStart() {
+        super.onStart()
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient!!.connect()
+        }
+    }
 
+    override fun onStop() {
+        super.onStop()
+        if (mGoogleApiClient!!.isConnected()) {
+            mGoogleApiClient!!.disconnect()
+        }
+        user.saveLoginInfo(this, mUsername, mUserID)
+    }
+
+
+    private fun setupUI() {
+        bottomNavigationView.menu.findItem(R.id.action_user_profile).title = mUsername
+        bottomNavigationView.setOnNavigationItemSelectedListener(this)
+    }
 
     private fun initializeLocation() {
         mGoogleApiClient = GoogleApiClient.Builder(this)
@@ -162,6 +126,35 @@ class Main : AppCompatActivity(),
         mapFragment.getMapAsync {
             googleMap = it
         }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+        //TODO Creating only one version of the fragment and not a new one whenever the bottom nav is used
+            R.id.action_all_posts -> {
+                val allPostsFragment = PostListFragment.newInstance(mUserID!!)
+                addFragment(allPostsFragment)
+            }
+            R.id.action_user_profile -> {
+                val profileFragment = ProfileFragment.newInstance(mUserID!!)
+                addFragment(profileFragment)
+            }
+            R.id.action_new_post -> {
+                addFragment(fragment)
+            }
+        }
+        return false
+    }
+
+
+    private fun addFragment(fragment: Fragment) {
+        supportFragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out)
+                .replace(R.id.content, fragment, fragment.tag)
+                .addToBackStack(fragment.javaClass.getSimpleName())
+                .commit()
+        Log.d(TAG, "addFragment(): fragment changed")
     }
 
     @SuppressLint("MissingPermission")
@@ -197,10 +190,9 @@ class Main : AppCompatActivity(),
         Log.i(TAG, "Connection failed. Error: " + connectionResult.getErrorCode())
     }
 
-            private fun getLocationOfPost(location: Location?): String {
-                return " '" + mLocation!!.latitude.toString() + ", " + mLocation!!.longitude.toString() + "' "
-            }
-
+    private fun getLocationOfPost(location: Location?): String {
+        return " '" + mLocation!!.latitude.toString() + ", " + mLocation!!.longitude.toString() + "' "
+    }
 
 
     //Permissions remain in the activity, don't go to a ViewModel

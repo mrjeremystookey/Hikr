@@ -26,14 +26,15 @@ class UserPref() {
         editor.apply()
     }
 
+
     fun getUserID(context: Context): String {
         val editor = getPreferences(context)
-        return editor.getString("userID", null)
+        return editor.getString("userID", "userID")
     }
 
     fun getUsername(context: Context): String {
         val editor = getPreferences(context)
-        return editor.getString("username", null)
+        return editor.getString("username", "username")
     }
 
 
