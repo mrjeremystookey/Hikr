@@ -25,6 +25,7 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
     private lateinit var mUserID: String
     private lateinit var mLocation: String
     private lateinit var viewModel: PostViewModel
+    private lateinit var toolbar: Toolbar
 
 
     companion object {
@@ -57,7 +58,7 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
         fabAddPost.setOnClickListener(this)
         setHasOptionsMenu(true)
 
-        val toolbar = activity!!.findViewById<Toolbar>(R.id.toolbar)
+        toolbar = activity!!.findViewById(R.id.toolbar)
         toolbar.title = "Create Post"
         toolbar.setTitleTextColor(resources.getColor(R.color.textColor))
         toolbar.setBackgroundColor(resources.getColor(R.color.colorPrimaryDark))
@@ -73,18 +74,26 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
         return view
     }
 
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        toolbar.title = "Create Post"
+    }
+
+    private fun changeToolbar(toolbar: Toolbar) {
+
+    }
+
     fun setLocation(location: String) {
         mLocation = location
         viewModel.setLocation(location)
     }
 
-    /**
-     * This method will be invoked when a menu item is clicked if the item itself did
-     * not already handle the event.
-     *
-     * @param item [MenuItem] that was clicked
-     * @return `true` if the event was handled, `false` otherwise.
-     */
+
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             R.id.pin -> {
@@ -120,6 +129,7 @@ class PostFragment: Fragment(), View.OnClickListener, android.support.v7.widget.
                 viewModel.updateTitle(it.toString())
             }
         }
+
     }
 
 
